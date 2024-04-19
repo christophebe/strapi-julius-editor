@@ -46,14 +46,14 @@ const HomePage = (ctx) => {
       await queryClient.invalidateQueries('settings')
       toggleNotification({
         type: 'success',
-        message: {id: 'strapi-tiptap-editor-save-success', defaultMessage: 'Saved'}
+        message: {id: 'strapi-julius-editor-save-success', defaultMessage: 'Saved'}
       })
       unlockApp()
     },
     onError: async () => {
       toggleNotification({
         type: 'warning',
-        message: {id: 'strapi-tiptap-editor-save-error', defaultMessage: 'Saved failed'}
+        message: {id: 'strapi-julius-editor-save-error', defaultMessage: 'Saved failed'}
       })
       unlockApp()
     }
@@ -63,7 +63,7 @@ const HomePage = (ctx) => {
     return (
       <Main aria-busy="true">
         <HeaderLayout
-          title={'Strapi TipTap Editor settings'}
+          title={'Strapi Julius Editor settings'}
           subtitle={'Change how the editor should behave'}
         />
         <ContentLayout>
@@ -88,7 +88,7 @@ const HomePage = (ctx) => {
           return (
             <Form>
               <HeaderLayout
-                title={'Strapi TipTap Editor settings'}
+                title={'Strapi Julius Editor settings'}
                 subtitle={'Change how the editor should behave'}
                 primaryAction={
                   <Button
