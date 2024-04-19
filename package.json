@@ -1,6 +1,6 @@
 {
   "name": "strapi-julius-editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A drop-in replacement for the strapi editor based on tiptap with components & AI",
   "strapi": {
     "name": "strapi-julius-editor",
@@ -15,8 +15,8 @@
   "keywords": [
     "strapi",
     "tiptap",
-    "editor", 
-    "AI editor", 
+    "editor",
+    "AI editor",
     "Content blocks editor"
   ],
   "author": "christophebe",
@@ -77,5 +77,4 @@
     "react-router-dom": "^5.2.0",
     "styled-components": "^5.2.1"
   }
-  
 }
