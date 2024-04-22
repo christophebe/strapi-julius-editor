@@ -730,10 +730,10 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                 .focus()
                 .insertContent({
                   type: "blocComponent",
-                  attrs: {
-                    text: "Hello from Julius - New Bloc",
-                    type: "warning",
-                  },
+                  // attrs: {
+                  //   text: "Hello from Julius - New Bloc",
+                  //   type: "warning",
+                  // },
                 })
                 .run();
             }}

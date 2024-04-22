@@ -10,7 +10,10 @@ export default Node.create({
   addAttributes() {
     return {
       type: {
-        default: "info",
+        default: "",
+      },
+      title: {
+        default: "",
       },
       text: {
         default: "",

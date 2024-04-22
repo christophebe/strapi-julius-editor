@@ -1,4 +1,4 @@
-import { Box, SingleSelect,  SingleSelectOption,  Textarea, TextInput, Typography } from "@strapi/design-system";
+import { Box, Flex, Grid, GridItem, SingleSelect,  SingleSelectOption,  Textarea, TextInput, Typography } from "@strapi/design-system";
 import { NodeViewWrapper } from "@tiptap/react";
 import { useState } from "react";
 
@@ -30,14 +30,23 @@ const BlocComponent = (props) => {
     });
   }
 
+  const handleTitle = (value) => {
+    props.updateAttributes({
+      title: value,
+    });
+  }
+
   return (
     <NodeViewWrapper className="react-component">
-      <Box background="neutral100" padding={4}>
-        <Typography textColor="neutral800" style={{ fontWeight: "bold" }}>
-          Content Bloc
-        </Typography>
-
-        <Box paddingTop={4}>
+      <Grid
+        gap={{
+          desktop: 5,
+          tablet: 2,
+          mobile: 1,
+        }}
+        background="neutral100"
+      >
+        <GridItem background="neutral100" padding={2} col={3} s={12}>
           <SingleSelect
             label="Type"
             required
@@ -51,61 +60,38 @@ const BlocComponent = (props) => {
               Good to known
             </SingleSelectOption>
           </SingleSelect>
-        </Box>
-        <Box paddingTop={4}>
-          <Textarea
-            paddingTop={4}
-            required
-            width="100%"
-            height="100px"
-            label="Content"
-            onChange={(e) => handleTextareaChange(e.target.value)}
-          >
-            {props.node.attrs.text}
-          </Textarea>
-        </Box>
-        <Box paddingTop={4}>
+        </GridItem>
+        <GridItem background="neutral100" padding={2} col={9} s={12}>
           <TextInput
-            label="Link Text"
+            label="Title"
+            onChange={(e) => handleTitle(e.target.value)}
+            value={props.node.attrs.title}
+          />
+        </GridItem>
+        <GridItem background="neutral100" padding={2} col={12} s={12}>
+          <Textarea
+            label="Text"
+            onChange={(e) => handleTextareaChange(e.target.value)}
+            value={props.node.attrs.text}
+          />
+        </GridItem>
+        <GridItem background="neutral100" padding={3} col={4} s={12}>
+          <TextInput
+            label="Link text"
             onChange={(e) => handleLinkText(e.target.value)}
             value={props.node.attrs.link_text}
           />
-        </Box>
-        <Box paddingTop={4}>
+        </GridItem>
+        <GridItem background="neutral100" padding={3} col={8} s={12}>
           <TextInput
             label="Link URL"
             onChange={(e) => handleLinkUrl(e.target.value)}
             value={props.node.attrs.link_url}
           />
-        </Box>
-      </Box>
+        </GridItem>
+      </Grid>
     </NodeViewWrapper>
   );
 };
 
 export default BlocComponent;
-
-
-
-      // {
-      //   /* <div style={{ backgroundColor: "lightgray", padding: "10px" }}>
-      //   <span className="label">Content Bloc</span>
-      //   <div className="content">
-      //     <select
-      //       style={{ marginBottom: "20px" }}
-      //       onChange={handleTypeChange}
-      //       value={props.node.attrs.type}
-      //     >
-      //       <option value="info">Info</option>
-      //       <option value="reminder">Reminder</option>
-      //       <option value="good-to-know">Good to known</option>
-      //     </select>
-      //     <textarea
-      //       style={{ width: "100%", height: "100px", marginBottom: "20px" }}
-      //       onChange={handleTextareaChange}
-      //     >
-      //       {props.node.attrs.text}
-      //     </textarea>
-      //   </div>
-      // </div> */
-      // }
