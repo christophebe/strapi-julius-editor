@@ -3,14 +3,40 @@ import {Box} from '@strapi/design-system/Box'
 import {GridLayout} from '@strapi/design-system/Layout'
 import {ToggleInput} from '@strapi/design-system/ToggleInput'
 import {Typography} from '@strapi/design-system/Typography'
+import { TextInput } from '@strapi/design-system'
 
 export default ({values, handleChange}) => {
   const wordcount = values.other && values.other.wordcount;
 
   return (
     <Fragment>
-      <Box marginBottom={'1rem'}>
-        <Typography variant={'beta'}>Other</Typography>
+      <Box marginBottom={"1rem"}>
+        <Typography variant={"beta"}>Content Bloc Type</Typography>
+      </Box>
+
+      <GridLayout>
+        <Box marginTop={"1rem"} marginBottom={"2rem"}>
+          <TextInput
+            label="Bloc Content Types"
+            type="text"
+            placeholder="Add a list here, comma separated"
+            name="rel"
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "contentBlocs.types",
+                  value: e.target.value,
+                },
+              })
+            }
+            value={values.contentBlocs.types}
+            aria-label="The list of bloc content types"
+          />
+        </Box>
+      </GridLayout>
+
+      <Box marginBottom={"1rem"}>
+        <Typography variant={"beta"}>Other</Typography>
       </Box>
 
       <GridLayout>
@@ -23,17 +49,19 @@ export default ({values, handleChange}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={wordcount}
-            onChange={e => handleChange({
-              target: {
-                name: 'other.wordcount',
-                value: !wordcount
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "other.wordcount",
+                  value: !wordcount,
+                },
+              })
+            }
+          />
         </Box>
       </GridLayout>
 
-      <Box marginTop={'2rem'} marginBottom={'1rem'}>
-      </Box>
+      <Box marginTop={"2rem"} marginBottom={"1rem"}></Box>
 
       <GridLayout>
         <Box>
@@ -45,14 +73,19 @@ export default ({values, handleChange}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.other.saveJson}
-            onChange={e => handleChange({
-              target: {
-                name: 'other.saveJson',
-                value: !values.other.saveJson
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "other.saveJson",
+                  value: !values.other.saveJson,
+                },
+              })
+            }
+          />
         </Box>
       </GridLayout>
+
+      <Box marginTop={"2rem"} marginBottom={"1rem"}></Box>
     </Fragment>
-  )
+  );
 }

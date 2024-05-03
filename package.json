@@ -1,6 +1,6 @@
 {
   "name": "strapi-julius-editor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A drop-in replacement for the strapi editor based on tiptap with components & AI",
   "strapi": {
     "name": "strapi-julius-editor",

@@ -38,5 +38,8 @@ module.exports = {
     enabled: true,
     height: 480,
     width: 640
+  },
+  contentBlocs: {
+    types: 'info,tips,quote,note'
   }
 }

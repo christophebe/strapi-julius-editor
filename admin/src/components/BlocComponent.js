@@ -1,12 +1,19 @@
 import { Box, Flex, Grid, GridItem, SingleSelect,  SingleSelectOption,  Textarea, TextInput, Typography } from "@strapi/design-system";
 import { NodeViewWrapper } from "@tiptap/react";
-import { useState } from "react";
+import { getSettings } from "../../../utils/api";
+import { mergeDeep } from "../utils/merge";
+import defaultSettings from "../../../utils/defaults";
+import { useQuery } from "react-query";
 
 const BlocComponent = (props) => {
+    const { data: savedSettings, isLoading } = useQuery(
+      "settings",
+      getSettings
+    );
+    const settings = mergeDeep(defaultSettings, savedSettings);
+    const types = settings.contentBlocs.types.split(",").map((type) => type.trim());
 
-  //const [selectedType, setSelectedType] = useState(props.node.attrs.type);
   const handleTypeChange = (value) => {
-    //setSelectedType(value);
     props.updateAttributes({
       type: value,
     });
@@ -54,11 +61,12 @@ const BlocComponent = (props) => {
             onChange={handleTypeChange}
             value={props.node.attrs.type}
           >
-            <SingleSelectOption value="info">Info</SingleSelectOption>
-            <SingleSelectOption value="reminder">Reminder</SingleSelectOption>
-            <SingleSelectOption value="good-to-know">
-              Good to known
-            </SingleSelectOption>
+            {types.map((type) => (
+              <SingleSelectOption key={type} value={type}>
+                {type}
+              </SingleSelectOption>
+            ))}
+
           </SingleSelect>
         </GridItem>
         <GridItem background="neutral100" padding={2} col={9} s={12}>
