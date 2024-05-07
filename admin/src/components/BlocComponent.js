@@ -11,7 +11,7 @@ const BlocComponent = (props) => {
       getSettings
     );
     const settings = mergeDeep(defaultSettings, savedSettings);
-    const types = settings.contentBlocs.types.split(",").map((type) => type.trim());
+    const types = settings.contentBlocs.types.split(",").map((type) => type.trim()).sort();
 
   const handleTypeChange = (value) => {
     props.updateAttributes({
