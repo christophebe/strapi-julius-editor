@@ -22,7 +22,7 @@ It is based on the [Tiptap interactive node views](https://tiptap.dev/docs/edito
 
 Until now, there is only one : CTA (Call to action). It's composed of a type, a title, a text and a link. We will see later how to add more content blocks.
 
-The produced output tag is : 
+The produced output HTML tag is : 
 ```code
 <block-component 
 type\"..." 
@@ -34,9 +34,7 @@ link_url="....">
 ```
 
 In your front-end, eg. NextJS, you can use a lib like html-react-parser to render this kind of tag.
-The type can be used to have different styles for different content blocks.The list of types can be configured in the Strapi settings for this extension.
-
-The name of the output tag can be configured in the Stappy settings for this extension. By dedault it's "block-component".
+The type can be used to have different styles for different content blocks. The list of types can be configured in the Strapi settings for this extension.
 
 ## Install 
 
