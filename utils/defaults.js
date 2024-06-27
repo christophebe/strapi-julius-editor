@@ -1,5 +1,5 @@
 module.exports = {
-  headings: ['h1', 'h2', 'h3', 'h4', 'h4', 'h5', 'h6'],
+  headings: ["h1", "h2", "h3", "h4", "h4", "h5", "h6"],
   bold: true,
   italic: true,
   strikethrough: true,
@@ -7,11 +7,10 @@ module.exports = {
   code: true,
   blockquote: true,
   color: true,
-  highlight:true,
-  align: ['left', 'center', 'right'],
-  lists: ['ol', 'ul'],
+  highlight: true,
+  align: ["left", "center", "right"],
+  lists: ["ol", "ul"],
   disableOrderedListShorthand: false,
-  columns: ['two', 'three'],
   table: true,
   hardbreak: true,
   horizontal: true,
@@ -22,8 +21,8 @@ module.exports = {
     linkOnPaste: true,
     relAttribute: false,
     HTMLAttributes: {
-      rel: ''
-    }
+      rel: "",
+    },
   },
   image: {
     enabled: true,
@@ -37,9 +36,9 @@ module.exports = {
   youtube: {
     enabled: true,
     height: 480,
-    width: 640
+    width: 640,
   },
-  contentBlocs: {
-    types: 'info,tips,quote,note'
-  }
-}
+  contentBlocks: {
+    types: "info,tips,quote,note",
+  },
+};

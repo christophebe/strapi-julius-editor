@@ -1,17 +1,24 @@
-import { Box, Flex, Grid, GridItem, SingleSelect,  SingleSelectOption,  Textarea, TextInput, Typography } from "@strapi/design-system";
+import {
+  Grid,
+  GridItem,
+  SingleSelect,
+  SingleSelectOption,
+  Textarea,
+  TextInput,
+} from "@strapi/design-system";
 import { NodeViewWrapper } from "@tiptap/react";
 import { getSettings } from "../../../utils/api";
 import { mergeDeep } from "../utils/merge";
 import defaultSettings from "../../../utils/defaults";
 import { useQuery } from "react-query";
 
-const BlocComponent = (props) => {
-    const { data: savedSettings, isLoading } = useQuery(
-      "settings",
-      getSettings
-    );
-    const settings = mergeDeep(defaultSettings, savedSettings);
-    const types = settings.contentBlocs.types.split(",").map((type) => type.trim()).sort();
+const BlockComponent = (props) => {
+  const { data: savedSettings, isLoading } = useQuery("settings", getSettings);
+  const settings = mergeDeep(defaultSettings, savedSettings);
+  const types = settings.contentBlocks.types
+    .split(",")
+    .map((type) => type.trim())
+    .sort();
 
   const handleTypeChange = (value) => {
     props.updateAttributes({
@@ -29,19 +36,19 @@ const BlocComponent = (props) => {
     props.updateAttributes({
       link_text: value,
     });
-  }
+  };
 
   const handleLinkUrl = (value) => {
     props.updateAttributes({
       link_url: value,
     });
-  }
+  };
 
   const handleTitle = (value) => {
     props.updateAttributes({
       title: value,
     });
-  }
+  };
 
   return (
     <NodeViewWrapper className="react-component">
@@ -66,7 +73,6 @@ const BlocComponent = (props) => {
                 {type}
               </SingleSelectOption>
             ))}
-
           </SingleSelect>
         </GridItem>
         <GridItem background="neutral100" padding={2} col={9} s={12}>
@@ -102,4 +108,4 @@ const BlocComponent = (props) => {
   );
 };
 
-export default BlocComponent;
+export default BlockComponent;

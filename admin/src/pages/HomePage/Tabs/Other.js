@@ -1,36 +1,36 @@
-import React, {Fragment} from 'react'
-import {Box} from '@strapi/design-system/Box'
-import {GridLayout} from '@strapi/design-system/Layout'
-import {ToggleInput} from '@strapi/design-system/ToggleInput'
-import {Typography} from '@strapi/design-system/Typography'
-import { TextInput } from '@strapi/design-system'
+import React, { Fragment } from "react";
+import { Box } from "@strapi/design-system/Box";
+import { GridLayout } from "@strapi/design-system/Layout";
+import { ToggleInput } from "@strapi/design-system/ToggleInput";
+import { Typography } from "@strapi/design-system/Typography";
+import { TextInput } from "@strapi/design-system";
 
-export default ({values, handleChange}) => {
+export default ({ values, handleChange }) => {
   const wordcount = values.other && values.other.wordcount;
 
   return (
     <Fragment>
       <Box marginBottom={"1rem"}>
-        <Typography variant={"beta"}>Content Bloc Type</Typography>
+        <Typography variant={"beta"}>Content Block</Typography>
       </Box>
 
       <GridLayout>
         <Box marginTop={"1rem"} marginBottom={"2rem"}>
           <TextInput
-            label="Bloc Content Types"
+            label="Block Content Types"
             type="text"
             placeholder="Add a list here, comma separated"
             name="rel"
             onChange={(e) =>
               handleChange({
                 target: {
-                  name: "contentBlocs.types",
+                  name: "contentBlocks.types",
                   value: e.target.value,
                 },
               })
             }
-            value={values.contentBlocs.types}
-            aria-label="The list of bloc content types"
+            value={values.contentBlocks.types}
+            aria-label="The list of block content types"
           />
         </Box>
       </GridLayout>
@@ -88,4 +88,4 @@ export default ({values, handleChange}) => {
       <Box marginTop={"2rem"} marginBottom={"1rem"}></Box>
     </Fragment>
   );
-}
+};

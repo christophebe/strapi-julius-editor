@@ -1,96 +1,117 @@
-import React, {useState, useRef, useEffect} from "react"
+import React, { useState, useRef, useEffect } from "react";
 
 // Icons
-import Bold from "@strapi/icons/Bold"
-import Italic from "@strapi/icons/Italic"
-import Strikethrough from "@strapi/icons/StrikeThrough"
-import Underline from "@strapi/icons/Underline"
-import {AiOutlineAlignCenter, AiOutlineAlignLeft, AiOutlineAlignRight, AiOutlineTable} from "react-icons/ai"
-import BulletList from "@strapi/icons/BulletList"
-import NumberList from "@strapi/icons/NumberList"
-import {BsLayoutSplit} from "react-icons/bs"
-import {BsLayoutThreeColumns} from "react-icons/bs"
-import Code from "@strapi/icons/Code"
-import {GrBlockQuote} from "react-icons/gr"
-import {AiFillYoutube, AiOutlineLine} from "react-icons/ai"
-import Link from "@strapi/icons/Link"
-import Landscape from "@strapi/icons/Landscape"
-import {FaImage} from "react-icons/fa"
-import PaintBrush from "@strapi/icons/PaintBrush"
-import Pencil from "@strapi/icons/Pencil"
-import Paint from "@strapi/icons/Paint"
-import { IconContext } from "react-icons"
-
-
+import Bold from "@strapi/icons/Bold";
+import Italic from "@strapi/icons/Italic";
+import Strikethrough from "@strapi/icons/StrikeThrough";
+import Underline from "@strapi/icons/Underline";
+import {
+  AiOutlineAlignCenter,
+  AiOutlineAlignLeft,
+  AiOutlineAlignRight,
+  AiOutlineTable,
+} from "react-icons/ai";
+import BulletList from "@strapi/icons/BulletList";
+import NumberList from "@strapi/icons/NumberList";
+import { BsLayoutSplit } from "react-icons/bs";
+import { BsLayoutThreeColumns } from "react-icons/bs";
+import Code from "@strapi/icons/Code";
+import { GrBlockQuote } from "react-icons/gr";
+import { AiFillYoutube, AiOutlineLine } from "react-icons/ai";
+import Link from "@strapi/icons/Link";
+import Landscape from "@strapi/icons/Landscape";
+import { FaImage } from "react-icons/fa";
+import PaintBrush from "@strapi/icons/PaintBrush";
+import Pencil from "@strapi/icons/Pencil";
+import Paint from "@strapi/icons/Paint";
+import { IconContext } from "react-icons";
 
 // Layout
-import { Box } from '@strapi/design-system/Box';
-import { Flex } from '@strapi/design-system/Flex';
-import { Button } from '@strapi/design-system/Button';
-import { TextInput } from '@strapi/design-system/TextInput';
-import { Textarea } from '@strapi/design-system/Textarea';
-import { Stack } from '@strapi/design-system/Stack';
-import { Dialog, DialogBody, DialogFooter } from '@strapi/design-system/Dialog';
-import { IconButton, IconButtonGroup } from '@strapi/design-system/IconButton';
-import { Select, Option } from '@strapi/design-system/Select';
-import { Popover } from '@strapi/design-system/Popover';
-import { Field, FieldLabel } from '@strapi/design-system/Field';
+import { Box } from "@strapi/design-system/Box";
+import { Flex } from "@strapi/design-system/Flex";
+import { Button } from "@strapi/design-system/Button";
+import { TextInput } from "@strapi/design-system/TextInput";
+import { Textarea } from "@strapi/design-system/Textarea";
+import { Stack } from "@strapi/design-system/Stack";
+import { Dialog, DialogBody, DialogFooter } from "@strapi/design-system/Dialog";
+import { IconButton, IconButtonGroup } from "@strapi/design-system/IconButton";
+import { Select, Option } from "@strapi/design-system/Select";
+import { Popover } from "@strapi/design-system/Popover";
+import { Field, FieldLabel } from "@strapi/design-system/Field";
 
 const onHeadingChange = (editor, type) => {
   switch (type) {
-    case 'h1':
-    case 'h2':
-    case 'h3':
-    case 'h4':
-    case 'h5':
-    case 'h6':
-      editor.chain().focus().toggleHeading({level: parseInt(type.replace('h', ''))}).run()
+    case "h1":
+    case "h2":
+    case "h3":
+    case "h4":
+    case "h5":
+    case "h6":
+      editor
+        .chain()
+        .focus()
+        .toggleHeading({ level: parseInt(type.replace("h", "")) })
+        .run();
       break;
-    case 'paragraph':
-      editor.chain().focus().setParagraph().run()
+    case "paragraph":
+      editor.chain().focus().setParagraph().run();
       break;
   }
-}
+};
 
 export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
   const [isVisibleLinkDialog, setIsVisibleLinkDialog] = useState(false);
-  const [linkInput, setLinkInput] = useState('');
-  const [linkTargetInput, setLinkTargetInput] = useState('');
+  const [linkInput, setLinkInput] = useState("");
+  const [linkTargetInput, setLinkTargetInput] = useState("");
 
   // YouTube
   const [isVisibleYouTubeDialog, setIsVisibleYouTubeDialog] = useState(false);
-  const [youTubeInput, setYouTubeInput] = useState('');
-  const [youTubeHeightInput, setYouTubeHeightInput] = useState(settings.youtube.height);
-  const [youTubeWidthInput, setYouTubeWidthInput] = useState(settings.youtube.width);
+  const [youTubeInput, setYouTubeInput] = useState("");
+  const [youTubeHeightInput, setYouTubeHeightInput] = useState(
+    settings.youtube.height
+  );
+  const [youTubeWidthInput, setYouTubeWidthInput] = useState(
+    settings.youtube.width
+  );
 
   const onInsertYouTubeEmbed = () => {
-    editor.chain().focus().setYoutubeVideo({
-      src: youTubeInput,
-      width: youTubeWidthInput,
-      height: youTubeHeightInput,
-    }).run()
-    setYouTubeInput('')
-    setIsVisibleYouTubeDialog(false)
-  }
+    editor
+      .chain()
+      .focus()
+      .setYoutubeVideo({
+        src: youTubeInput,
+        width: youTubeWidthInput,
+        height: youTubeHeightInput,
+      })
+      .run();
+    setYouTubeInput("");
+    setIsVisibleYouTubeDialog(false);
+  };
 
   // Base64 Image dialog
   const [base64MediaLibVisible, setBase64MediaLibVisible] = useState(false);
-  const [base64Input, setBase64Input] = useState('');
-  const handleToggleBase54MediaLib = () => setBase64MediaLibVisible(prev => !prev);
+  const [base64Input, setBase64Input] = useState("");
+  const handleToggleBase54MediaLib = () =>
+    setBase64MediaLibVisible((prev) => !prev);
 
-  const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+  const base64regex =
+    /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
   const isValidBase64String = base64regex.test(base64Input);
 
   const openBase64Dialog = () => {
-    if (editor.getAttributes('image').src && editor.getAttributes('image').src.includes(';base64')) setBase64Input(editor.getAttributes('image').src)
-    setBase64MediaLibVisible(true)
-  }
+    if (
+      editor.getAttributes("image").src &&
+      editor.getAttributes("image").src.includes(";base64")
+    )
+      setBase64Input(editor.getAttributes("image").src);
+    setBase64MediaLibVisible(true);
+  };
 
   const onInsertBase64Image = () => {
-    editor.chain().focus().setImage({src: base64Input}).run()
-    setBase64Input('')
-    setBase64MediaLibVisible(false)
-  }
+    editor.chain().focus().setImage({ src: base64Input }).run();
+    setBase64Input("");
+    setBase64MediaLibVisible(false);
+  };
 
   // Color picker
   const [colorPopoverVisible, setColorPopoverVisible] = useState(false);
@@ -99,56 +120,48 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
   const highlightInputRef = useRef();
 
   const openLinkDialog = () => {
-    const previousUrl = editor.getAttributes('link').href
-    const previousTarget = editor.getAttributes('link').target
+    const previousUrl = editor.getAttributes("link").href;
+    const previousTarget = editor.getAttributes("link").target;
 
     // Update fields before showing dialog
-    if(previousUrl) setLinkInput(previousUrl)
-    if(previousTarget) setLinkTargetInput(previousTarget)
+    if (previousUrl) setLinkInput(previousUrl);
+    if (previousTarget) setLinkTargetInput(previousTarget);
 
-
-    setIsVisibleLinkDialog(true)
-  }
+    setIsVisibleLinkDialog(true);
+  };
 
   const onInsertLink = () => {
     // empty
-    if (linkInput === '') {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .unsetLink()
-        .run()
-
+    if (linkInput === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
     } else {
       // update link
       editor
         .chain()
         .focus()
-        .extendMarkRange('link')
-        .setLink({href: linkInput, target: linkTargetInput})
-        .run()
+        .extendMarkRange("link")
+        .setLink({ href: linkInput, target: linkTargetInput })
+        .run();
     }
 
-
-    setIsVisibleLinkDialog(false)
-    setLinkInput('')
-    setLinkTargetInput('')
-  }
+    setIsVisibleLinkDialog(false);
+    setLinkInput("");
+    setLinkTargetInput("");
+  };
 
   if (!editor) {
-    return null
+    return null;
   }
 
-  let selectedTextStyle = "none"
+  let selectedTextStyle = "none";
 
-  if (editor.isActive('heading', {level: 1})) selectedTextStyle = "h1"
-  if (editor.isActive('heading', {level: 2})) selectedTextStyle = "h2"
-  if (editor.isActive('heading', {level: 3})) selectedTextStyle = "h3"
-  if (editor.isActive('heading', {level: 4})) selectedTextStyle = "h4"
-  if (editor.isActive('heading', {level: 5})) selectedTextStyle = "h5"
-  if (editor.isActive('heading', {level: 6})) selectedTextStyle = "h6"
-  if (editor.isActive('paragraph')) selectedTextStyle = "paragraph"
+  if (editor.isActive("heading", { level: 1 })) selectedTextStyle = "h1";
+  if (editor.isActive("heading", { level: 2 })) selectedTextStyle = "h2";
+  if (editor.isActive("heading", { level: 3 })) selectedTextStyle = "h3";
+  if (editor.isActive("heading", { level: 4 })) selectedTextStyle = "h4";
+  if (editor.isActive("heading", { level: 5 })) selectedTextStyle = "h5";
+  if (editor.isActive("heading", { level: 6 })) selectedTextStyle = "h6";
+  if (editor.isActive("paragraph")) selectedTextStyle = "paragraph";
 
   return (
     <Box padding={2} background="neutral100" className="menu-bar">
@@ -407,33 +420,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
               />
             ) : null}
           </IconButtonGroup>
-
-          <IconContext.Provider value={{ color: "#32324D" }}>
-            <IconButtonGroup className="button-group">
-              {settings.columns.includes("two") ? (
-                <IconButton
-                  icon={<BsLayoutSplit />}
-                  label="Two columns"
-                  className={[
-                    "medium-icon",
-                    editor.isActive({ cssColumns: "2" }) ? "is-active" : "",
-                  ]}
-                  onClick={() => editor.chain().focus().toggleColumns(2).run()}
-                />
-              ) : null}
-              {settings.columns.includes("three") ? (
-                <IconButton
-                  icon={<BsLayoutThreeColumns />}
-                  label="Three columns"
-                  className={[
-                    "medium-icon",
-                    editor.isActive({ cssColumns: "3" }) ? "is-active" : "",
-                  ]}
-                  onClick={() => editor.chain().focus().toggleColumns(3).run()}
-                />
-              ) : null}
-            </IconButtonGroup>
-          </IconContext.Provider>
 
           <IconButtonGroup className="button-group">
             {settings.code ? (
@@ -729,11 +715,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                 .chain()
                 .focus()
                 .insertContent({
-                  type: "blocComponent",
-                  // attrs: {
-                  //   text: "Hello from Julius - New Bloc",
-                  //   type: "warning",
-                  // },
+                  type: "blockComponent",
                 })
                 .run();
             }}
@@ -742,4 +724,4 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
       </Flex>
     </Box>
   );
-}
+};

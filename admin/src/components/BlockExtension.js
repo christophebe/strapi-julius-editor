@@ -1,9 +1,9 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import BlocComponent from "./BlocComponent";
+import BlockComponent from "./BlockComponent";
 
 export default Node.create({
-  name: "blocComponent",
+  name: "blockComponent",
   group: "block",
   atom: true,
 
@@ -30,16 +30,16 @@ export default Node.create({
   parseHTML() {
     return [
       {
-        tag: "bloc-component",
+        tag: "block-component",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["bloc-component", mergeAttributes(HTMLAttributes)];
+    return ["block-component", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(BlocComponent);
+    return ReactNodeViewRenderer(BlockComponent);
   },
 });
