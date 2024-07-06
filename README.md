@@ -56,6 +56,29 @@ config.plugins.push(new webpack.NormalModuleReplacementPlugin(
   'tippy.js/dist/tippy-bundle.umd.min.js'
 ))
 ```
+### Add the following to middlewares config (/config/middlewares.js)
+You need to add "frame-src": ["'self'", "www.youtube.com"] to the content security policy to allow embedding YouTube videos in your Strapi editor.
+```javascript
+export default [
+  // other policies
+  "strapi::errors",
+  {
+    name: "strapi::security",
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          "connect-src": ["'self'", "http:", "https:"],
+          "frame-src": ["'self'", "www.youtube.com"],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+ // other policies
+];
+
+```
 
 ### Build the Strapi Admin
 npm run build
