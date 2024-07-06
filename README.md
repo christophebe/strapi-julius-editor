@@ -61,7 +61,6 @@ You need to add "frame-src": ["'self'", "www.youtube.com"] to the content securi
 ```javascript
 export default [
   // other policies
-  "strapi::errors",
   {
     name: "strapi::security",
     config: {
