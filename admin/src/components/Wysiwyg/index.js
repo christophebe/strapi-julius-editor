@@ -54,7 +54,8 @@ import { Color as ColorExtension } from "@tiptap/extension-color";
 import HighlightExtension from "@tiptap/extension-highlight";
 import { mergeDeep } from "../../utils/merge";
 import BlockExtension from "../BlockExtension.js";
-
+import TextDirection from "tiptap-text-direction";
+import "../style/styles.css";
 const Wysiwyg = (opts) => {
   const {
     name,
@@ -137,6 +138,9 @@ const WysiwygContent = ({
       UnderlineExtension,
       TextAlignExtension.configure({
         types: ["heading", "paragraph"],
+      }),
+      TextDirection.configure({
+        types: ["heading", "paragraph", "bulletList", "orderedList"],
       }),
       TextStyleExtension,
       settings.color ? ColorExtension : null,

@@ -60,6 +60,7 @@
     "@tiptap/extension-text-style": "2.5.9",
     "@tiptap/extension-underline": "2.5.9",
     "@tiptap/extension-youtube": "2.5.9",
+    "tiptap-text-direction": "^0.3.1",
     "@tiptap/pm": "2.5.9",
     "@tiptap/react": "2.5.9",
     "prop-types": "^15.7.2",
