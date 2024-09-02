@@ -88,5 +88,8 @@ You should now be able to access to the editor settings in the Strapi admin.
 
 ![Julius Editor Settings](doc/settings-text.png)
 
+### RTL Support
+To align content written in languages such as Arabic (العربية), Urdu (اُردُو), or Persian (فارسی) to the left, you'll need to set the default editor alignment to the right using the settings below.
 
+![Julius Editor Settings](doc/defaultalignment.png)
 

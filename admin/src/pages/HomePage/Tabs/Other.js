@@ -7,7 +7,7 @@ import { TextInput } from "@strapi/design-system";
 
 export default ({ values, handleChange }) => {
   const wordcount = values.other && values.other.wordcount;
-
+  const defaultAlign = values.defaultAlign;
   return (
     <Fragment>
       <Box marginBottom={"1rem"}>
@@ -34,7 +34,31 @@ export default ({ values, handleChange }) => {
           />
         </Box>
       </GridLayout>
+      <Box marginBottom={"1rem"}>
+        <Typography variant={"beta"}>Default Align</Typography>
+      </Box>
 
+      <GridLayout>
+        <Box marginTop={"1rem"} marginBottom={"2rem"}>
+          <ToggleInput
+            label="Default Align"
+            hint="Set the default alignment for the editor"
+            size="S"
+            name="defaultAlign"
+            onLabel="Left"
+            offLabel="Right"
+            checked={defaultAlign === "left"}
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "defaultAlign",
+                  value: defaultAlign === "left" ? "right" : "left",
+                },
+              })
+            }
+          />
+        </Box>
+      </GridLayout>
       <Box marginBottom={"1rem"}>
         <Typography variant={"beta"}>Other</Typography>
       </Box>

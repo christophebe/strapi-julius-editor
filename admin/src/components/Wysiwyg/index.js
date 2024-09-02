@@ -138,6 +138,7 @@ const WysiwygContent = ({
       UnderlineExtension,
       TextAlignExtension.configure({
         types: ["heading", "paragraph"],
+        defaultAlignment: settings.defaultAlign,
       }),
       TextDirection.configure({
         types: ["heading", "paragraph", "bulletList", "orderedList"],
