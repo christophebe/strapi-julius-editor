@@ -246,7 +246,24 @@ export default ({errors, values, handleChange, isSubmitting}) => {
               }
             })}/>
         </Box>
-        <Box></Box>
+        <Box>
+          <ToggleInput
+            label="Justify"
+            size="S"
+            name="align"
+            onLabel="Enabled"
+            offLabel="Disabled"
+            checked={values.align.includes("justify")}
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "align",
+                  value: addRemoveFromList([...values.align], "justify"),
+                },
+              })
+            }
+          />
+        </Box>
       </GridLayout>
 
       <Box marginTop={'2rem'} marginBottom={'1rem'}>

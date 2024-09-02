@@ -11,6 +11,12 @@ import {
   AiOutlineAlignRight,
   AiOutlineTable,
 } from "react-icons/ai";
+import {
+  FaAlignJustify,
+  FaAlignCenter,
+  FaAlignLeft,
+  FaAlignRight,
+} from "react-icons/fa6";
 import BulletList from "@strapi/icons/BulletList";
 import NumberList from "@strapi/icons/NumberList";
 import { BsLayoutSplit } from "react-icons/bs";
@@ -366,7 +372,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
           <IconButtonGroup className="button-group">
             {settings.align.includes("left") ? (
               <IconButton
-                icon={<AiOutlineAlignLeft />}
+                icon={<FaAlignLeft />}
                 label="Align left"
                 className={["medium-icon"]}
                 onClick={() =>
@@ -376,7 +382,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
             ) : null}
             {settings.align.includes("center") ? (
               <IconButton
-                icon={<AiOutlineAlignCenter />}
+                icon={<FaAlignCenter />}
                 label="Align center"
                 className={["medium-icon"]}
                 onClick={() =>
@@ -386,11 +392,21 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
             ) : null}
             {settings.align.includes("right") ? (
               <IconButton
-                icon={<AiOutlineAlignRight />}
+                icon={<FaAlignRight />}
                 label="Align right"
                 className={["medium-icon"]}
                 onClick={() =>
                   editor.chain().focus().setTextAlign("right").run()
+                }
+              />
+            ) : null}
+            {settings.align.includes("justify") ? (
+              <IconButton
+                icon={<FaAlignJustify />}
+                label="Align justify"
+                className={["medium-icon"]}
+                onClick={() =>
+                  editor.chain().focus().setTextAlign("justify").run()
                 }
               />
             ) : null}
