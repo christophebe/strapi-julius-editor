@@ -1,6 +1,6 @@
 {
   "name": "tiptap-editor-strapi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A drop-in replacement for the strapi editor based on tiptap with components & AI",
   "strapi": {
     "name": "tiptap-editor-strapi",
