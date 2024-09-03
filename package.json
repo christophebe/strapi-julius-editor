@@ -1,12 +1,12 @@
 {
-  "name": "strapi-julius-editor",
-  "version": "0.0.9",
+  "name": "tiptap-editor-strapi",
+  "version": "0.1.0",
   "description": "A drop-in replacement for the strapi editor based on tiptap with components & AI",
   "strapi": {
-    "name": "strapi-julius-editor",
+    "name": "tiptap-editor-strapi",
     "description": "A drop-in replacement for the strapi editor with tiptap with components & AI",
     "kind": "plugin",
-    "displayName": "Julius Editor"
+    "displayName": "Tiptap Editor"
   },
   "repository": {
     "type": "git",
@@ -19,12 +19,12 @@
     "AI editor",
     "Content blocks editor"
   ],
-  "author": "christophebe",
+  "author": "devmoatassem",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/christophebe/strapi-julius-editor/issues"
+    "url": "https://github.com/devmoatassem/tiptap-editor-strapi/issues"
   },
-  "homepage": "https://github.com/christophebe/strapi-julius-editor#readme",
+  "homepage": "https://github.com/devmoatassem/tiptap-editor-strapi#readme",
   "dependencies": {
     "@strapi/design-system": "1.19.0",
     "@strapi/helper-plugin": "4.25.7",
