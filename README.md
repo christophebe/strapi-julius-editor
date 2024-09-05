@@ -1,5 +1,5 @@
 
-# Strapi Julius Editor
+# Strapi TipTap Editor
 A drop-in replacement for the strapi editor based on [TipTap](https://tiptap.dev/).
 It support usual text formatting, tables, videa, images, ... and content blocks (still in dev).
 
@@ -7,7 +7,7 @@ It saves as plain HTML, making it easy to use with various frontends.
 
 We also plan to add AI based content generation in the future.
 
- ![Julius editor for Strapi](doc/screenshot.png)
+ ![TipTap editor for Strapi](doc/screenshot.png)
 
 This is a fork of the original [strapi-tiptap-editor](https://github.com/dasmikko/strapi-tiptap-editor)
 
@@ -40,11 +40,11 @@ The type can be used to have different styles for different content blocks. The 
 
 ```
 # Install the dependency
-npm install strapi-julius-editor
+npm install tiptap-editor-strapi
 
 or 
 
-yarn add strapi-julius-editor
+yarn add tiptap-editor-strapi
 ```
 
 ### Add the following to the webpack config (/src/admin/webpack.config.js)
@@ -86,10 +86,10 @@ npm run build
 # Setting up the editor
 You should now be able to access to the editor settings in the Strapi admin. 
 
-![Julius Editor Settings](doc/settings-text.png)
+![TipTap Editor Settings](doc/settings-text.png)
 
 ### RTL Support
 To align content written in languages such as Arabic (العربية), Urdu (اُردُو), or Persian (فارسی) to the left, you'll need to set the default editor alignment to the right using the settings below.
 
-![Julius Editor Settings](doc/defaultalignment.png)
+![TipTap Editor Settings](doc/defaultalignment.png)
 

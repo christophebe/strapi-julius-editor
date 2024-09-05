@@ -46,14 +46,14 @@ const HomePage = (ctx) => {
       await queryClient.invalidateQueries('settings')
       toggleNotification({
         type: 'success',
-        message: {id: 'strapi-julius-editor-save-success', defaultMessage: 'Saved'}
+        message: {id: 'tiptap-editor-strapi-save-success', defaultMessage: 'Saved'}
       })
       unlockApp()
     },
     onError: async () => {
       toggleNotification({
         type: 'warning',
-        message: {id: 'strapi-julius-editor-save-error', defaultMessage: 'Saved failed'}
+        message: {id: 'tiptap-editor-strapi-save-error', defaultMessage: 'Saved failed'}
       })
       unlockApp()
     }
@@ -63,38 +63,39 @@ const HomePage = (ctx) => {
     return (
       <Main aria-busy="true">
         <HeaderLayout
-          title={'Strapi Julius Editor settings'}
-          subtitle={'Change how the editor should behave'}
+          title={"Strapi TipTap Editor settings"}
+          subtitle={"Change how the editor should behave"}
         />
         <ContentLayout>
-          <LoadingIndicatorPage/>
+          <LoadingIndicatorPage />
         </ContentLayout>
       </Main>
-    )
+    );
   }
 
   // Merge saved settings with default values, in case new ones are added
-  const mergedSettings = mergeDeep(defaultSettings, query.data)
+  const mergedSettings = mergeDeep(defaultSettings, query.data);
 
   return (
     <Main aria-busy={query.isLoading}>
       <Formik
         initialValues={mergedSettings}
         onSubmit={async (values) => {
-          lockApp()
-          await mutation.mutateAsync(values)
-        }}>
-        {({errors, values, handleChange, isSubmitting}) => {
+          lockApp();
+          await mutation.mutateAsync(values);
+        }}
+      >
+        {({ errors, values, handleChange, isSubmitting }) => {
           return (
             <Form>
               <HeaderLayout
-                title={'Strapi Julius Editor settings'}
-                subtitle={'Change how the editor should behave'}
+                title={"Strapi TipTap Editor settings"}
+                subtitle={"Change how the editor should behave"}
                 primaryAction={
                   <Button
                     isLoading={mutation.isLoading}
                     type="submit"
-                    startIcon={<Check/>}
+                    startIcon={<Check />}
                     size="L"
                   >
                     Save
@@ -111,7 +112,11 @@ const HomePage = (ctx) => {
                   paddingLeft={7}
                   paddingRight={7}
                 >
-                  <TabGroup label="Some stuff for the label" id="tabs" variant="simple">
+                  <TabGroup
+                    label="Some stuff for the label"
+                    id="tabs"
+                    variant="simple"
+                  >
                     <Tabs>
                       <Tab>Text</Tab>
                       <Tab>Layout</Tab>
@@ -120,7 +125,11 @@ const HomePage = (ctx) => {
                     </Tabs>
                     <TabPanels>
                       <TabPanel>
-                        <Box color="neutral800" padding={4} background="neutral0">
+                        <Box
+                          color="neutral800"
+                          padding={4}
+                          background="neutral0"
+                        >
                           <TextTabContent
                             errors={errors}
                             values={values}
@@ -130,7 +139,11 @@ const HomePage = (ctx) => {
                         </Box>
                       </TabPanel>
                       <TabPanel>
-                        <Box color="neutral800" padding={4} background="neutral0">
+                        <Box
+                          color="neutral800"
+                          padding={4}
+                          background="neutral0"
+                        >
                           <LayoutTabContent
                             errors={errors}
                             values={values}
@@ -141,7 +154,11 @@ const HomePage = (ctx) => {
                       </TabPanel>
                       <TabPanel>
                         {/* Embeds tab content*/}
-                        <Box color="neutral800" padding={4} background="neutral0">
+                        <Box
+                          color="neutral800"
+                          padding={4}
+                          background="neutral0"
+                        >
                           <EmbedsTabContent
                             errors={errors}
                             values={values}
@@ -152,7 +169,11 @@ const HomePage = (ctx) => {
                       </TabPanel>
                       <TabPanel>
                         {/* Other tab content*/}
-                        <Box color="neutral800" padding={4} background="neutral0">
+                        <Box
+                          color="neutral800"
+                          padding={4}
+                          background="neutral0"
+                        >
                           <OtherTabContent
                             errors={errors}
                             values={values}
@@ -167,11 +188,11 @@ const HomePage = (ctx) => {
                 </Box>
               </ContentLayout>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Main>
-  )
+  );
 }
 
 export default memo(HomePage)
