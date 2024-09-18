@@ -54,7 +54,8 @@ import { Color as ColorExtension } from "@tiptap/extension-color";
 import HighlightExtension from "@tiptap/extension-highlight";
 import { mergeDeep } from "../../utils/merge";
 import BlockExtension from "../BlockExtension.js";
-
+import TextDirection from "tiptap-text-direction";
+import "../style/styles.css";
 const Wysiwyg = (opts) => {
   const {
     name,
@@ -137,6 +138,10 @@ const WysiwygContent = ({
       UnderlineExtension,
       TextAlignExtension.configure({
         types: ["heading", "paragraph"],
+        defaultAlignment: settings.defaultAlign,
+      }),
+      TextDirection.configure({
+        types: ["heading", "paragraph", "bulletList", "orderedList"],
       }),
       TextStyleExtension,
       settings.color ? ColorExtension : null,
@@ -204,9 +209,16 @@ const WysiwygContent = ({
       preserveWhitespace: "full",
     },
     onUpdate(ctx) {
-      if (settings.other.saveJson) {
+      const newContent = settings.other.saveJson
+      ? JSON.stringify(ctx.editor.getJSON())
+      : ctx.editor.getHTML();
+
+    // Update the state if the content has actually changed
+    if (newContent !== currentContent) {
+      setCurrentContent(newContent);
+      // if (settings.other.saveJson) {
         onChange({
-          target: { name, value: JSON.stringify(ctx.editor.getJSON()) },
+          target: { name, value: newContent },
         });
       } else {
         onChange({ target: { name, value: ctx.editor.getHTML() } });
@@ -215,12 +227,11 @@ const WysiwygContent = ({
   });
 
   useEffect(() => {
-    if (editor === null) return;
-    if (currentContent === "") {
-      // Content can be 2 things: JSON or String. Be able to display both things.
+   // Check if the value prop differs from the current editor content
+   if (editor && value !== currentContent) {
 
       try {
-        // If content is saved as json, parse it
+         // If content is saved as JSON, parse it
         const json = JSON.parse(value);
         setCurrentContent(value);
         editor.commands.setContent(json, false);
@@ -230,7 +241,7 @@ const WysiwygContent = ({
         editor.commands.setContent(value, false);
       }
     }
-  }, [editor]);
+  }, [editor,value]);
 
   return (
     <Field required={required}>

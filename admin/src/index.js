@@ -15,13 +15,22 @@ const myComponent = async () => {
 export default {
   register(app) {
     app.createSettingSection(
-      { id: 'strapi-julius-editor', intlLabel: { id: 'my-plugin.plugin.name', defaultMessage: 'Strapi Julius Editor' } }, // Section to create
+      {
+        id: "tiptap-editor-strapi",
+        intlLabel: {
+          id: "my-plugin.plugin.name",
+          defaultMessage: "Strapi TipTap Editor",
+        },
+      }, // Section to create
       [
         // links
         {
-          intlLabel: { id: 'my-plugin.plugin.name', defaultMessage: 'Settings' },
-          id: 'Settings',
-          to: '/settings/strapi-julius-editor',
+          intlLabel: {
+            id: "my-plugin.plugin.name",
+            defaultMessage: "Settings",
+          },
+          id: "Settings",
+          to: "/settings/tiptap-editor-strapi",
           Component: myComponent,
           permissions: [],
         },

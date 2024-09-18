@@ -1,0 +1,40 @@
+/* blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+/* blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+} */
+
+/* blockquote p {
+    display: inline;
+} */
+
+.ProseMirror p[dir="rtl"],
+.ProseMirror h1[dir="rtl"],
+.ProseMirror h2[dir="rtl"],
+.ProseMirror h3[dir="rtl"],
+.ProseMirror h4[dir="rtl"],
+.ProseMirror h5[dir="rtl"],
+.ProseMirror h6[dir="rtl"] {
+    text-align: right;
+}
+
+.ProseMirror p[dir="ltr"],
+.ProseMirror h1[dir="ltr"],
+.ProseMirror h2[dir="ltr"],
+.ProseMirror h3[dir="ltr"],
+.ProseMirror h4[dir="ltr"],
+.ProseMirror h5[dir="ltr"],
+.ProseMirror h6[dir="ltr"] {
+    text-align: left;
+}
