@@ -1,43 +1,40 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useState } from "react";
 
 // Icons
 import Bold from "@strapi/icons/Bold";
+import BulletList from "@strapi/icons/BulletList";
+import Code from "@strapi/icons/Code";
 import Italic from "@strapi/icons/Italic";
+import Landscape from "@strapi/icons/Landscape";
+import Link from "@strapi/icons/Link";
+import NumberList from "@strapi/icons/NumberList";
+import PaintBrush from "@strapi/icons/PaintBrush";
+import Pencil from "@strapi/icons/Pencil";
+import Play from "@strapi/icons/Play";
 import Strikethrough from "@strapi/icons/StrikeThrough";
 import Underline from "@strapi/icons/Underline";
 import {
+  AiFillYoutube,
   AiOutlineAlignCenter,
   AiOutlineAlignLeft,
   AiOutlineAlignRight,
+  AiOutlineLine,
   AiOutlineTable,
 } from "react-icons/ai";
-import BulletList from "@strapi/icons/BulletList";
-import NumberList from "@strapi/icons/NumberList";
-import { BsLayoutSplit } from "react-icons/bs";
-import { BsLayoutThreeColumns } from "react-icons/bs";
-import Code from "@strapi/icons/Code";
-import { GrBlockQuote } from "react-icons/gr";
-import { AiFillYoutube, AiOutlineLine } from "react-icons/ai";
-import Link from "@strapi/icons/Link";
-import Landscape from "@strapi/icons/Landscape";
 import { FaImage } from "react-icons/fa";
-import PaintBrush from "@strapi/icons/PaintBrush";
-import Pencil from "@strapi/icons/Pencil";
-import Paint from "@strapi/icons/Paint";
-import { IconContext } from "react-icons";
+import { GrBlockQuote } from "react-icons/gr";
 
 // Layout
 import { Box } from "@strapi/design-system/Box";
-import { Flex } from "@strapi/design-system/Flex";
 import { Button } from "@strapi/design-system/Button";
+import { Dialog, DialogBody, DialogFooter } from "@strapi/design-system/Dialog";
+import { Field, FieldLabel } from "@strapi/design-system/Field";
+import { Flex } from "@strapi/design-system/Flex";
+import { IconButton, IconButtonGroup } from "@strapi/design-system/IconButton";
+import { Option, Select } from "@strapi/design-system/Select";
+import { Stack } from "@strapi/design-system/Stack";
 import { TextInput } from "@strapi/design-system/TextInput";
 import { Textarea } from "@strapi/design-system/Textarea";
-import { Stack } from "@strapi/design-system/Stack";
-import { Dialog, DialogBody, DialogFooter } from "@strapi/design-system/Dialog";
-import { IconButton, IconButtonGroup } from "@strapi/design-system/IconButton";
-import { Select, Option } from "@strapi/design-system/Select";
-import { Popover } from "@strapi/design-system/Popover";
-import { Field, FieldLabel } from "@strapi/design-system/Field";
 
 const onHeadingChange = (editor, type) => {
   switch (type) {
@@ -111,6 +108,27 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
     editor.chain().focus().setImage({ src: base64Input }).run();
     setBase64Input("");
     setBase64MediaLibVisible(false);
+  };
+
+  // Video simple dialog for URL paste (optional, mainly we use media library)
+  const [videoDialogVisible, setVideoDialogVisible] = useState(false);
+  const [videoUrlInput, setVideoUrlInput] = useState("");
+  const onInsertVideoFromUrl = () => {
+    if (!videoUrlInput) return;
+    editor
+      .chain()
+      .focus()
+      .setVideo({
+        src: videoUrlInput,
+        controls: settings.video?.controls,
+        autoplay: settings.video?.autoplay,
+        loop: settings.video?.loop,
+        muted: settings.video?.muted,
+        playsinline: settings.video?.playsinline,
+      })
+      .run();
+    setVideoUrlInput("");
+    setVideoDialogVisible(false);
   };
 
   // Color picker
@@ -529,6 +547,20 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
               />
             ) : null}
 
+            {settings.video?.enabled ? (
+              <IconButton
+                icon={<Play />}
+                label={
+                  editor.isActive("video") ? "Change video" : "Insert video"
+                }
+                className={[
+                  "medium-icon",
+                  editor.isActive("video") ? "is-active" : "",
+                ]}
+                onClick={toggleMediaLib}
+              />
+            ) : null}
+
             <Dialog
               onClose={() => setBase64MediaLibVisible(false)}
               title="Insert base64 image"
@@ -579,6 +611,48 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                     variant="success-light"
                   >
                     Insert image
+                  </Button>
+                }
+              />
+            </Dialog>
+
+            {/* Insert video by URL (optional helper) */}
+            <Dialog
+              onClose={() => setVideoDialogVisible(false)}
+              title="Insert video URL"
+              isOpen={videoDialogVisible}
+            >
+              <DialogBody>
+                <Stack spacing={2}>
+                  <TextInput
+                    label="Video URL (webm/mp4)"
+                    placeholder="Paste the media URL here"
+                    name="video-url"
+                    onChange={(e) => setVideoUrlInput(e.target.value)}
+                    value={videoUrlInput}
+                    aria-label="Video URL"
+                  />
+                </Stack>
+              </DialogBody>
+              <DialogFooter
+                startAction={
+                  <Button
+                    onClick={() => {
+                      setVideoUrlInput("");
+                      setVideoDialogVisible(false);
+                    }}
+                    variant="tertiary"
+                  >
+                    Cancel
+                  </Button>
+                }
+                endAction={
+                  <Button
+                    disabled={videoUrlInput.length === 0}
+                    onClick={() => onInsertVideoFromUrl()}
+                    variant="success-light"
+                  >
+                    Insert video
                   </Button>
                 }
               />

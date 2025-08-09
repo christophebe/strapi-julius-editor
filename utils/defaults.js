@@ -29,6 +29,15 @@ module.exports = {
     inline: true,
     allowBase64: false,
   },
+  video: {
+    enabled: true,
+    // default HTML attributes for inserted videos
+    controls: true,
+    autoplay: false,
+    loop: false,
+    muted: false,
+    playsinline: true,
+  },
   other: {
     wordcount: false,
     saveJson: false,

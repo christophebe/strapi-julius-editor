@@ -1,59 +1,50 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { Stack } from "@strapi/design-system/Stack";
 import { Box } from "@strapi/design-system/Box";
-import {
-  Field,
-  FieldLabel,
-  FieldHint,
-  FieldError,
-  FieldInput,
-  FieldAction,
-} from "@strapi/design-system/Field";
+import { Field, FieldLabel } from "@strapi/design-system/Field";
+import { Stack } from "@strapi/design-system/Stack";
 import { Typography } from "@strapi/design-system/Typography";
-import MediaLib from "../MediaLib/index.js";
-import Editor from "../Editor";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
+import { useQuery } from "react-query";
 import { getSettings } from "../../../../utils/api";
 import defaultSettings from "../../../../utils/defaults";
-import { useQuery } from "react-query";
-import Earth from "@strapi/icons/Earth";
+import Editor from "../Editor";
 
 // Editor
-import { useEditor } from "@tiptap/react";
-import { Extension, mergeAttributes, wrappingInputRule } from "@tiptap/core";
-import UnderlineExtension from "@tiptap/extension-underline";
-import LinkExtension from "@tiptap/extension-link";
-import ImageExtension from "@tiptap/extension-image";
-import TextAlignExtension from "@tiptap/extension-text-align";
-import TableExtension from "@tiptap/extension-table";
-import TableRowExtension from "@tiptap/extension-table-row";
-import TableCellExtension from "@tiptap/extension-table-cell";
-import TableHeaderExtension from "@tiptap/extension-table-header";
-import TextStyleExtension from "@tiptap/extension-text-style";
-import CharacterCountExtension from "@tiptap/extension-character-count";
-import YouTubeExtension from "@tiptap/extension-youtube";
-import CodeExtension from "@tiptap/extension-code";
-import BoldExtension from "@tiptap/extension-bold";
-import ItalicExtension from "@tiptap/extension-italic";
-import StrikeExtension, { Strike } from "@tiptap/extension-strike";
-import OrderedListExtension from "@tiptap/extension-ordered-list";
-import BulletListExtension from "@tiptap/extension-bullet-list";
-import ListItemExtension from "@tiptap/extension-list-item";
-import GapcursorExtension from "@tiptap/extension-gapcursor";
-import History from "@tiptap/extension-history";
 import BlockquoteExtension from "@tiptap/extension-blockquote";
+import BoldExtension from "@tiptap/extension-bold";
+import BulletListExtension from "@tiptap/extension-bullet-list";
+import CharacterCountExtension from "@tiptap/extension-character-count";
+import CodeExtension from "@tiptap/extension-code";
 import CodeBlockExtension from "@tiptap/extension-code-block";
+import { Color as ColorExtension } from "@tiptap/extension-color";
 import DocumentExtension from "@tiptap/extension-document";
+import GapcursorExtension from "@tiptap/extension-gapcursor";
 import HardBreakExtension from "@tiptap/extension-hard-break";
 import HeadingExtension from "@tiptap/extension-heading";
-import HorizontalRuleExtension from "@tiptap/extension-horizontal-rule";
-import ParagraphExtension from "@tiptap/extension-paragraph";
-import TextExtension from "@tiptap/extension-text";
-import { Color as ColorExtension } from "@tiptap/extension-color";
 import HighlightExtension from "@tiptap/extension-highlight";
+import History from "@tiptap/extension-history";
+import HorizontalRuleExtension from "@tiptap/extension-horizontal-rule";
+import ImageExtension from "@tiptap/extension-image";
+import ItalicExtension from "@tiptap/extension-italic";
+import LinkExtension from "@tiptap/extension-link";
+import ListItemExtension from "@tiptap/extension-list-item";
+import OrderedListExtension from "@tiptap/extension-ordered-list";
+import ParagraphExtension from "@tiptap/extension-paragraph";
+import StrikeExtension from "@tiptap/extension-strike";
+import TableExtension from "@tiptap/extension-table";
+import TableCellExtension from "@tiptap/extension-table-cell";
+import TableHeaderExtension from "@tiptap/extension-table-header";
+import TableRowExtension from "@tiptap/extension-table-row";
+import TextExtension from "@tiptap/extension-text";
+import TextAlignExtension from "@tiptap/extension-text-align";
+import TextStyleExtension from "@tiptap/extension-text-style";
+import UnderlineExtension from "@tiptap/extension-underline";
+import YouTubeExtension from "@tiptap/extension-youtube";
+import { useEditor } from "@tiptap/react";
 import { mergeDeep } from "../../utils/merge";
 import BlockExtension from "../BlockExtension.js";
+import VideoExtension from "../VideoExtension";
 
 const Wysiwyg = (opts) => {
   const {
@@ -178,6 +169,9 @@ const WysiwygContent = ({
             allowBase64: settings.image.allowBase64,
           })
         : null,
+
+      // Video
+      settings.video && settings.video.enabled ? VideoExtension : null,
 
       // Table
       settings.table

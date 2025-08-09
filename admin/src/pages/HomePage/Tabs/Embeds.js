@@ -1,16 +1,15 @@
-import React, {Fragment} from 'react'
-import {Box} from '@strapi/design-system/Box'
-import {GridLayout} from '@strapi/design-system/Layout'
-import {ToggleInput} from '@strapi/design-system/ToggleInput'
-import {TextInput} from '@strapi/design-system/TextInput'
-import {Typography} from '@strapi/design-system/Typography'
-import { addRemoveFromList } from '../../../../../utils/helpers.js'
+import { Box } from "@strapi/design-system/Box";
+import { GridLayout } from "@strapi/design-system/Layout";
+import { TextInput } from "@strapi/design-system/TextInput";
+import { ToggleInput } from "@strapi/design-system/ToggleInput";
+import { Typography } from "@strapi/design-system/Typography";
+import React, { Fragment } from "react";
 
-export default ({errors, values, handleChange, isSubmitting}) => {
+export default ({ errors, values, handleChange, isSubmitting }) => {
   return (
     <Fragment>
-      <Box marginBottom={'1rem'}>
-        <Typography variant={'beta'}>Image</Typography>
+      <Box marginBottom={"1rem"}>
+        <Typography variant={"beta"}>Image</Typography>
       </Box>
 
       <GridLayout>
@@ -23,17 +22,20 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.image.enabled}
-            onChange={e => handleChange({
-              target: {
-                name: 'image.enabled',
-                value: !values.image.enabled
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "image.enabled",
+                  value: !values.image.enabled,
+                },
+              })
+            }
+          />
         </Box>
       </GridLayout>
 
-      <Box marginTop={'1rem'} marginBottom={'1rem'}>
-        <Typography variant={'delta'}>Settings</Typography>
+      <Box marginTop={"1rem"} marginBottom={"1rem"}>
+        <Typography variant={"delta"}>Settings</Typography>
       </Box>
 
       <GridLayout>
@@ -47,12 +49,15 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.image.inline}
-            onChange={e => handleChange({
-              target: {
-                name: 'image.inline',
-                value: !values.image.inline
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "image.inline",
+                  value: !values.image.inline,
+                },
+              })
+            }
+          />
         </Box>
 
         <Box>
@@ -65,19 +70,42 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.image.allowBase64}
-            onChange={e => handleChange({
-              target: {
-                name: 'image.allowBase64',
-                value: !values.image.allowBase64
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "image.allowBase64",
+                  value: !values.image.allowBase64,
+                },
+              })
+            }
+          />
+        </Box>
+
+        <Box>
+          <ToggleInput
+            label="Videos"
+            hint="Allow to add videos (webm/mp4) from media library"
+            size="S"
+            name="video.enabled"
+            onLabel="Enabled"
+            offLabel="Disabled"
+            checked={values.video?.enabled}
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "video.enabled",
+                  value: !values.video?.enabled,
+                },
+              })
+            }
+          />
         </Box>
         <Box></Box>
         <Box></Box>
       </GridLayout>
 
-      <Box marginTop={'2rem'} marginBottom={'1rem'}>
-        <Typography variant={'beta'}>Links</Typography>
+      <Box marginTop={"2rem"} marginBottom={"1rem"}>
+        <Typography variant={"beta"}>Links</Typography>
       </Box>
 
       <GridLayout>
@@ -90,17 +118,20 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.links.enabled}
-            onChange={e => handleChange({
-              target: {
-                name: 'links.enabled',
-                value: !values.links.enabled
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "links.enabled",
+                  value: !values.links.enabled,
+                },
+              })
+            }
+          />
         </Box>
       </GridLayout>
 
-      <Box marginTop={'1rem'} marginBottom={'1rem'}>
-        <Typography variant={'delta'}>Settings</Typography>
+      <Box marginTop={"1rem"} marginBottom={"1rem"}>
+        <Typography variant={"delta"}>Settings</Typography>
       </Box>
 
       <GridLayout>
@@ -114,12 +145,15 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.links.autolink}
-            onChange={e => handleChange({
-              target: {
-                name: 'links.autolink',
-                value: !values.links.autolink
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "links.autolink",
+                  value: !values.links.autolink,
+                },
+              })
+            }
+          />
         </Box>
 
         <Box>
@@ -132,12 +166,15 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.links.openOnClick}
-            onChange={e => handleChange({
-              target: {
-                name: 'links.autolink',
-                value: !values.links.openOnClick
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "links.autolink",
+                  value: !values.links.openOnClick,
+                },
+              })
+            }
+          />
         </Box>
 
         <Box>
@@ -150,12 +187,15 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.links.linkOnPaste}
-            onChange={e => handleChange({
-              target: {
-                name: 'links.linkOnPaste',
-                value: !values.links.linkOnPaste
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "links.linkOnPaste",
+                  value: !values.links.linkOnPaste,
+                },
+              })
+            }
+          />
         </Box>
         <Box></Box>
       </GridLayout>
@@ -166,22 +206,26 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             label="Rel attribute value"
             type="text"
             placeholder="Value of the rel attribute of links"
-            name="rel" onChange={e => handleChange({
-            target: {
-              name: 'links.HTMLAttributes.rel',
-              value: e.target.value
+            name="rel"
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "links.HTMLAttributes.rel",
+                  value: e.target.value,
+                },
+              })
             }
-          })}
             value={values.links.HTMLAttributes.rel}
-            aria-label="Value of the rel attribute of links"/>
+            aria-label="Value of the rel attribute of links"
+          />
         </Box>
         <Box></Box>
         <Box></Box>
         <Box></Box>
       </GridLayout>
 
-      <Box marginTop={'2rem'} marginBottom={'1rem'}>
-        <Typography variant={'beta'}>YouTube</Typography>
+      <Box marginTop={"2rem"} marginBottom={"1rem"}>
+        <Typography variant={"beta"}>YouTube</Typography>
       </Box>
 
       <GridLayout>
@@ -194,12 +238,15 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             onLabel="Enabled"
             offLabel="Disabled"
             checked={values.youtube.enabled}
-            onChange={e => handleChange({
-              target: {
-                name: 'youtube.enabled',
-                value: !values.youtube.enabled
-              }
-            })}/>
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "youtube.enabled",
+                  value: !values.youtube.enabled,
+                },
+              })
+            }
+          />
         </Box>
 
         <Box>
@@ -207,14 +254,18 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             label="Default video width"
             type="number"
             placeholder="width of the embed"
-            name="width" onChange={e => handleChange({
+            name="width"
+            onChange={(e) =>
+              handleChange({
                 target: {
-                  name: 'youtube.width',
-                  value: e.target.value
-                }
-              })}
+                  name: "youtube.width",
+                  value: e.target.value,
+                },
+              })
+            }
             value={values.youtube.width}
-            aria-label="YouTube video width"/>
+            aria-label="YouTube video width"
+          />
         </Box>
 
         <Box>
@@ -223,16 +274,19 @@ export default ({errors, values, handleChange, isSubmitting}) => {
             type="number"
             placeholder="height of the embed"
             name="height"
-            onChange={e => handleChange({
-            target: {
-              name: 'youtube.height',
-              value: e.target.value
+            onChange={(e) =>
+              handleChange({
+                target: {
+                  name: "youtube.height",
+                  value: e.target.value,
+                },
+              })
             }
-          })}
             value={values.youtube.height}
-            aria-label="YouTube video height"/>
+            aria-label="YouTube video height"
+          />
         </Box>
       </GridLayout>
     </Fragment>
-  )
-}
+  );
+};
