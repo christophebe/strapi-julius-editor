@@ -1,0 +1,1 @@
+for the strapi project in the folder julius-cms, do the following instructions : 
