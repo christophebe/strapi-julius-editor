@@ -198,33 +198,34 @@ const WysiwygContent = ({
       preserveWhitespace: "full",
     },
     onUpdate(ctx) {
-      if (settings.other.saveJson) {
+      const newContent = settings.other.saveJson
+        ? JSON.stringify(ctx.editor.getJSON())
+        : ctx.editor.getHTML();
+
+      // Update the state if the content has actually changed
+      if (newContent !== currentContent) {
+        setCurrentContent(newContent);
         onChange({
-          target: { name, value: JSON.stringify(ctx.editor.getJSON()) },
+          target: { name, value: newContent },
         });
-      } else {
-        onChange({ target: { name, value: ctx.editor.getHTML() } });
       }
     },
   });
 
   useEffect(() => {
-    if (editor === null) return;
-    if (currentContent === "") {
-      // Content can be 2 things: JSON or String. Be able to display both things.
-
+    // Check if the value prop differs from the current editor content
+    if (editor && value !== currentContent) {
       try {
-        // If content is saved as json, parse it
+        // If content is saved as JSON, parse it
         const json = JSON.parse(value);
-        setCurrentContent(value);
         editor.commands.setContent(json, false);
       } catch (e) {
-        // Use value as is, the content hasn't been converted to json.
-        setCurrentContent(value);
+        // Use value as is, the content hasn't been converted to JSON.
         editor.commands.setContent(value, false);
       }
+      setCurrentContent(value);
     }
-  }, [editor]);
+  }, [editor, value]);
 
   return (
     <Field required={required}>
