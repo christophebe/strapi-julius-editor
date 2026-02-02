@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Box } from "@strapi/design-system/Box";
+import { Box } from "@strapi/design-system";
 
 
 export default styled(Box)`
@@ -49,7 +49,8 @@ export default styled(Box)`
 
   .ProseMirror {
     outline: none;
-    line-height: 1.25rem;
+    font-size: 16px;
+    line-height: 1.8rem;
     color: ${({ theme }) => theme.colors.neutral800};
     min-height: 80px;
 

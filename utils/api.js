@@ -1,9 +1,15 @@
-import {request} from '@strapi/helper-plugin';
+import { getFetchClient } from '@strapi/strapi/admin';
 
-export function getSettings () {
-  return request('/strapi-julius-editor/')
+export async function getSettings () {
+  const { get } = getFetchClient();
+  const { data } = await get('/strapi-julius-editor/');
+
+  return data;
 }
 
-export function updateSettings (settings) {
-  return request('/strapi-julius-editor/update-settings', {method: 'PUT', body: settings })
+export async function updateSettings (settings) {
+  const { put } = getFetchClient();
+  const { data } = await put('/strapi-julius-editor/update-settings', settings);
+
+  return data;
 }

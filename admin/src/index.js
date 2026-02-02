@@ -4,13 +4,8 @@ import pluginId from "./pluginId";
 
 const name = pluginPkg.strapi.name;
 
-const myComponent = async () => {
-  const component = await import(
-    /* webpackChunkName: "strapi-tiptip-editor-settings-page" */ './pages/App'
-    );
-
-  return component;
-};
+const SettingsPage = () =>
+  import(/* webpackChunkName: "strapi-julius-editor-settings-page" */ './pages/App');
 
 export default {
   register(app) {
@@ -21,14 +16,14 @@ export default {
         {
           intlLabel: { id: 'my-plugin.plugin.name', defaultMessage: 'Settings' },
           id: 'Settings',
-          to: '/settings/strapi-julius-editor',
-          Component: myComponent,
+          to: 'strapi-julius-editor',
+          Component: SettingsPage,
           permissions: [],
         },
       ]
     );
 
-    app.addFields({ type: 'wysiwyg', Component: Wysiwyg });
+    app.addFields({ type: 'richtext', Component: Wysiwyg });
 
     app.registerPlugin({
       id: pluginId,

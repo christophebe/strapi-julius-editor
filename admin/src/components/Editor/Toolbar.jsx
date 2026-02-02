@@ -1,18 +1,20 @@
 import React, { useRef, useState } from "react";
 
 // Icons
-import Bold from "@strapi/icons/Bold";
-import BulletList from "@strapi/icons/BulletList";
-import Code from "@strapi/icons/Code";
-import Italic from "@strapi/icons/Italic";
-import Landscape from "@strapi/icons/Landscape";
-import Link from "@strapi/icons/Link";
-import NumberList from "@strapi/icons/NumberList";
-import PaintBrush from "@strapi/icons/PaintBrush";
-import Pencil from "@strapi/icons/Pencil";
-import Play from "@strapi/icons/Play";
-import Strikethrough from "@strapi/icons/StrikeThrough";
-import Underline from "@strapi/icons/Underline";
+import {
+  Bold,
+  BulletList,
+  Code,
+  Italic,
+  Image,
+  Link,
+  NumberList,
+  PaintBrush,
+  Pencil,
+  Play,
+  StrikeThrough,
+  Underline,
+} from "@strapi/icons";
 import {
   AiFillYoutube,
   AiOutlineAlignCenter,
@@ -25,16 +27,20 @@ import { FaImage } from "react-icons/fa";
 import { GrBlockQuote } from "react-icons/gr";
 
 // Layout
-import { Box } from "@strapi/design-system/Box";
-import { Button } from "@strapi/design-system/Button";
-import { Dialog, DialogBody, DialogFooter } from "@strapi/design-system/Dialog";
-import { Field, FieldLabel } from "@strapi/design-system/Field";
-import { Flex } from "@strapi/design-system/Flex";
-import { IconButton, IconButtonGroup } from "@strapi/design-system/IconButton";
-import { Option, Select } from "@strapi/design-system/Select";
-import { Stack } from "@strapi/design-system/Stack";
-import { TextInput } from "@strapi/design-system/TextInput";
-import { Textarea } from "@strapi/design-system/Textarea";
+import {
+  Box,
+  Button,
+  Dialog,
+  Field,
+  Flex,
+  IconButton,
+  IconButtonGroup,
+  SingleSelect,
+  SingleSelectOption,
+  TextInput,
+  Textarea,
+} from "@strapi/design-system";
+import Stack from "../Stack";
 
 const onHeadingChange = (editor, type) => {
   switch (type) {
@@ -88,13 +94,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
   // Base64 Image dialog
   const [base64MediaLibVisible, setBase64MediaLibVisible] = useState(false);
   const [base64Input, setBase64Input] = useState("");
-  const handleToggleBase54MediaLib = () =>
-    setBase64MediaLibVisible((prev) => !prev);
-
-  const base64regex =
-    /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-  const isValidBase64String = base64regex.test(base64Input);
-
   const openBase64Dialog = () => {
     if (
       editor.getAttributes("image").src &&
@@ -186,7 +185,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
       <Flex justifyContent="space-between">
         <Flex style={{ flexWrap: "wrap" }}>
           <Box className="button-group">
-            <Select
+            <SingleSelect
               id="select1"
               required
               size="S"
@@ -194,76 +193,79 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
               onChange={(val) => onHeadingChange(editor, val)}
               value={selectedTextStyle}
             >
-              <Option value={"paragraph"}>Paragraph</Option>
+              <SingleSelectOption value={"paragraph"}>Paragraph</SingleSelectOption>
               {settings.headings.includes("h1") ? (
-                <Option value={"h1"}>Heading 1</Option>
+                <SingleSelectOption value={"h1"}>Heading 1</SingleSelectOption>
               ) : null}
               {settings.headings.includes("h2") ? (
-                <Option value={"h2"}>Heading 2</Option>
+                <SingleSelectOption value={"h2"}>Heading 2</SingleSelectOption>
               ) : null}
               {settings.headings.includes("h3") ? (
-                <Option value={"h3"}>Heading 3</Option>
+                <SingleSelectOption value={"h3"}>Heading 3</SingleSelectOption>
               ) : null}
               {settings.headings.includes("h4") ? (
-                <Option value={"h4"}>Heading 4</Option>
+                <SingleSelectOption value={"h4"}>Heading 4</SingleSelectOption>
               ) : null}
               {settings.headings.includes("h5") ? (
-                <Option value={"h5"}>Heading 5</Option>
+                <SingleSelectOption value={"h5"}>Heading 5</SingleSelectOption>
               ) : null}
               {settings.headings.includes("h6") ? (
-                <Option value={"h6"}>Heading 6</Option>
+                <SingleSelectOption value={"h6"}>Heading 6</SingleSelectOption>
               ) : null}
-            </Select>
+            </SingleSelect>
           </Box>
 
           <IconButtonGroup className="button-group">
             {settings.bold ? (
               <IconButton
-                icon={<Bold />}
                 label="Bold"
                 className={[
                   "large-icon",
                   editor.isActive("bold") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleBold().run()}
-              />
+              >
+                <Bold />
+              </IconButton>
             ) : null}
             {settings.italic ? (
               <IconButton
-                icon={<Italic />}
                 label="Italic"
                 className={[
                   "large-icon",
                   editor.isActive("italic") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-              />
+              >
+                <Italic />
+              </IconButton>
             ) : null}
             {settings.strikethrough ? (
               <IconButton
-                icon={<Strikethrough />}
                 label="Strikethrough"
                 className={[
                   "large-icon",
                   editor.isActive("strike") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleStrike().run()}
-              />
+              >
+                <StrikeThrough />
+              </IconButton>
             ) : null}
             {settings.underline ? (
               <IconButton
-                icon={<Underline />}
                 label="Underline"
                 className={[
                   "large-icon",
                   editor.isActive("underline") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
-              />
+              >
+                <Underline />
+              </IconButton>
             ) : null}
             {settings.color ? (
               <IconButton
-                icon={<PaintBrush />}
                 label="Text color"
                 onClick={() => {
                   setColorPopoverVisible((s) => !s);
@@ -272,12 +274,13 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                       editor.getAttributes("textStyle").color;
                   }, 10);
                 }}
-              />
+              >
+                <PaintBrush />
+              </IconButton>
             ) : null}
 
             {settings.highlight ? (
               <IconButton
-                icon={<Pencil />}
                 label="Highlight"
                 onClick={() => {
                   setHighlightPopoverVisible((s) => !s);
@@ -286,25 +289,24 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                       editor.getAttributes("highlight").color;
                   }, 10);
                 }}
-              />
+              >
+                <Pencil />
+              </IconButton>
             ) : null}
             {/* text color input dialog */}
-            <Dialog
-              onClose={() => setColorPopoverVisible(false)}
-              title="Select color"
-              isOpen={colorPopoverVisible}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <input
-                    style={{ width: "100%", height: "2em" }}
-                    type="color"
-                    ref={colorInputRef}
-                  />
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+            <Dialog.Root open={colorPopoverVisible} onOpenChange={setColorPopoverVisible}>
+              <Dialog.Content>
+                <Dialog.Header>Select color</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
+                    <input
+                      style={{ width: "100%", height: "2em" }}
+                      type="color"
+                      ref={colorInputRef}
+                    />
+                  </Stack>
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setColorPopoverVisible(false);
@@ -314,8 +316,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Remove color
                   </Button>
-                }
-                endAction={
                   <Button
                     onClick={() => {
                       editor
@@ -329,27 +329,24 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Change color
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
 
             {/* highlight color input dialog */}
-            <Dialog
-              onClose={() => setHighlightPopoverVisible(false)}
-              title="Select color"
-              isOpen={highlightPopoverVisible}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <input
-                    style={{ width: "100%", height: "2em" }}
-                    type="color"
-                    ref={highlightInputRef}
-                  />
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+            <Dialog.Root open={highlightPopoverVisible} onOpenChange={setHighlightPopoverVisible}>
+              <Dialog.Content>
+                <Dialog.Header>Select color</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
+                    <input
+                      style={{ width: "100%", height: "2em" }}
+                      type="color"
+                      ref={highlightInputRef}
+                    />
+                  </Stack>
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setHighlightPopoverVisible(false);
@@ -359,8 +356,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Remove color
                   </Button>
-                }
-                endAction={
                   <Button
                     onClick={() => {
                       editor
@@ -376,126 +371,130 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Change color
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
           </IconButtonGroup>
 
           <IconButtonGroup className="button-group">
             {settings.align.includes("left") ? (
               <IconButton
-                icon={<AiOutlineAlignLeft />}
                 label="Align left"
                 className={["medium-icon"]}
                 onClick={() =>
                   editor.chain().focus().setTextAlign("left").run()
                 }
-              />
+              >
+                <AiOutlineAlignLeft />
+              </IconButton>
             ) : null}
             {settings.align.includes("center") ? (
               <IconButton
-                icon={<AiOutlineAlignCenter />}
                 label="Align center"
                 className={["medium-icon"]}
                 onClick={() =>
                   editor.chain().focus().setTextAlign("center").run()
                 }
-              />
+              >
+                <AiOutlineAlignCenter />
+              </IconButton>
             ) : null}
             {settings.align.includes("right") ? (
               <IconButton
-                icon={<AiOutlineAlignRight />}
                 label="Align right"
                 className={["medium-icon"]}
                 onClick={() =>
                   editor.chain().focus().setTextAlign("right").run()
                 }
-              />
+              >
+                <AiOutlineAlignRight />
+              </IconButton>
             ) : null}
           </IconButtonGroup>
 
           <IconButtonGroup className="button-group">
             {settings.lists.includes("ul") ? (
               <IconButton
-                icon={<BulletList />}
                 label="Bullet list"
                 className={[
                   "large-icon",
                   editor.isActive("bulletList") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-              />
+              >
+                <BulletList />
+              </IconButton>
             ) : null}
             {settings.lists.includes("ol") ? (
               <IconButton
-                icon={<NumberList />}
                 label="Ordered list"
                 className={[
                   "large-icon",
                   editor.isActive("orderedList") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              />
+              >
+                <NumberList />
+              </IconButton>
             ) : null}
           </IconButtonGroup>
 
           <IconButtonGroup className="button-group">
             {settings.code ? (
               <IconButton
-                icon={<Code />}
                 label="Code"
                 className={[
                   "large-icon",
                   editor.isActive("codeBlock") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              />
+              >
+                <Code />
+              </IconButton>
             ) : null}
 
             {settings.blockquote ? (
               <IconButton
-                icon={<GrBlockQuote />}
                 label="Blockquote"
                 className={[
                   "large-icon",
                   editor.isActive("blockquote") ? "is-active" : "",
                 ]}
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              />
+              >
+                <GrBlockQuote />
+              </IconButton>
             ) : null}
 
-            <Dialog
-              onClose={() => setIsVisibleLinkDialog(false)}
-              title="Insert link"
-              isOpen={isVisibleLinkDialog}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <TextInput
-                    label="Link URL"
-                    placeholder="Write or paste the url here"
-                    name="url"
-                    onChange={(e) => setLinkInput(e.target.value)}
-                    value={linkInput}
-                    aria-label="URL"
-                  />
-                  <Select
-                    id="linkTargetSelect"
-                    label="Link target"
-                    required
-                    placeholder="Select link target"
-                    value={linkTargetInput}
-                    onChange={setLinkTargetInput}
-                  >
-                    <Option value={"_self"}>Self</Option>
-                    <Option value={"_blank"}>Blank</Option>
-                    <Option value={"_parent"}>Parent</Option>
-                    <Option value={"_top"}>Top</Option>
-                  </Select>
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+            <Dialog.Root open={isVisibleLinkDialog} onOpenChange={setIsVisibleLinkDialog}>
+              <Dialog.Content>
+                <Dialog.Header>Insert link</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
+                    <TextInput
+                      label="Link URL"
+                      placeholder="Write or paste the url here"
+                      name="url"
+                      onChange={(e) => setLinkInput(e.target.value)}
+                      value={linkInput}
+                      aria-label="URL"
+                    />
+                    <SingleSelect
+                      id="linkTargetSelect"
+                      label="Link target"
+                      required
+                      placeholder="Select link target"
+                      value={linkTargetInput}
+                      onChange={setLinkTargetInput}
+                    >
+                      <SingleSelectOption value={"_self"}>Self</SingleSelectOption>
+                      <SingleSelectOption value={"_blank"}>Blank</SingleSelectOption>
+                      <SingleSelectOption value={"_parent"}>Parent</SingleSelectOption>
+                      <SingleSelectOption value={"_top"}>Top</SingleSelectOption>
+                    </SingleSelect>
+                  </Stack>
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setLinkInput("");
@@ -506,33 +505,31 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Cancel
                   </Button>
-                }
-                endAction={
                   <Button
                     onClick={() => onInsertLink()}
                     variant="success-light"
                   >
                     Insert link
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
 
             {settings.links.enabled ? (
               <IconButton
-                icon={<Link />}
                 label="Link"
                 className={[
                   "medium-icon",
                   editor.isActive("link") ? "is-active" : "",
                 ]}
                 onClick={() => openLinkDialog()}
-              />
+              >
+                <Link />
+              </IconButton>
             ) : null}
 
             {settings.image.enabled ? (
               <IconButton
-                icon={<Landscape />}
                 label={
                   editor.isActive("image") ? "Change image" : "Insert image"
                 }
@@ -544,12 +541,13 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                     : "",
                 ]}
                 onClick={toggleMediaLib}
-              />
+              >
+                <Image />
+              </IconButton>
             ) : null}
 
             {settings.video?.enabled ? (
               <IconButton
-                icon={<Play />}
                 label={
                   editor.isActive("video") ? "Change video" : "Insert video"
                 }
@@ -558,42 +556,41 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   editor.isActive("video") ? "is-active" : "",
                 ]}
                 onClick={toggleMediaLib}
-              />
+              >
+                <Play />
+              </IconButton>
             ) : null}
 
-            <Dialog
-              onClose={() => setBase64MediaLibVisible(false)}
-              title="Insert base64 image"
-              isOpen={base64MediaLibVisible}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <Textarea
-                    label="Base64 content"
-                    placeholder="Write or paste the base64 url here"
-                    name="url"
-                    onChange={(e) => setBase64Input(e.target.value)}
-                    value={base64Input}
-                    style={{ maxHeight: "200px" }}
-                    aria-label="URL"
-                  />
+            <Dialog.Root open={base64MediaLibVisible} onOpenChange={setBase64MediaLibVisible}>
+              <Dialog.Content>
+                <Dialog.Header>Insert base64 image</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
+                    <Textarea
+                      label="Base64 content"
+                      placeholder="Write or paste the base64 url here"
+                      name="url"
+                      onChange={(e) => setBase64Input(e.target.value)}
+                      value={base64Input}
+                      style={{ maxHeight: "200px" }}
+                      aria-label="URL"
+                    />
 
-                  <Field name="preview">
-                    <Stack spacing={1}>
-                      <FieldLabel>Preview</FieldLabel>
-                      {base64Input.length ? (
-                        <img
-                          style={{ maxWidth: "100%" }}
-                          src={base64Input}
-                          alt=""
-                        />
-                      ) : null}
-                    </Stack>
-                  </Field>
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+                    <Field.Root name="preview">
+                      <Stack spacing={1}>
+                        <Field.Label>Preview</Field.Label>
+                        {base64Input.length ? (
+                          <img
+                            style={{ maxWidth: "100%" }}
+                            src={base64Input}
+                            alt=""
+                          />
+                        ) : null}
+                      </Stack>
+                    </Field.Root>
+                  </Stack>
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setBase64Input("");
@@ -603,8 +600,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Cancel
                   </Button>
-                }
-                endAction={
                   <Button
                     disabled={base64Input.length === 0}
                     onClick={() => onInsertBase64Image()}
@@ -612,30 +607,27 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Insert image
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
 
             {/* Insert video by URL (optional helper) */}
-            <Dialog
-              onClose={() => setVideoDialogVisible(false)}
-              title="Insert video URL"
-              isOpen={videoDialogVisible}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <TextInput
-                    label="Video URL (webm/mp4)"
-                    placeholder="Paste the media URL here"
-                    name="video-url"
-                    onChange={(e) => setVideoUrlInput(e.target.value)}
-                    value={videoUrlInput}
-                    aria-label="Video URL"
-                  />
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+            <Dialog.Root open={videoDialogVisible} onOpenChange={setVideoDialogVisible}>
+              <Dialog.Content>
+                <Dialog.Header>Insert video URL</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
+                    <TextInput
+                      label="Video URL (webm/mp4)"
+                      placeholder="Paste the media URL here"
+                      name="video-url"
+                      onChange={(e) => setVideoUrlInput(e.target.value)}
+                      value={videoUrlInput}
+                      aria-label="Video URL"
+                    />
+                  </Stack>
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setVideoUrlInput("");
@@ -645,8 +637,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Cancel
                   </Button>
-                }
-                endAction={
                   <Button
                     disabled={videoUrlInput.length === 0}
                     onClick={() => onInsertVideoFromUrl()}
@@ -654,13 +644,12 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Insert video
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
 
             {settings.image.allowBase64 ? (
               <IconButton
-                icon={<FaImage />}
                 label={
                   editor.isActive("image")
                     ? "Change image"
@@ -674,12 +663,13 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                     : "",
                 ]}
                 onClick={openBase64Dialog}
-              />
+              >
+                <FaImage />
+              </IconButton>
             ) : null}
 
             {settings.table ? (
               <IconButton
-                icon={<AiOutlineTable />}
                 label="Table"
                 className={[
                   "large-icon",
@@ -692,71 +682,72 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                     .insertTable({ cols: 3, row: 3, withHeaderRow: false })
                     .run()
                 }
-              />
+              >
+                <AiOutlineTable />
+              </IconButton>
             ) : null}
 
             {settings.youtube.enabled ? (
               <IconButton
-                icon={<AiFillYoutube />}
                 label="YouTube"
                 className={[
                   "large-icon",
                   editor.isActive("youtube") ? "is-active" : "",
                 ]}
                 onClick={() => setIsVisibleYouTubeDialog(true)}
-              />
+              >
+                <AiFillYoutube />
+              </IconButton>
             ) : null}
 
             {settings.horizontal ? (
               <IconButton
-                icon={<AiOutlineLine />}
                 label="Horizontal line"
                 className={["large-icon"]}
                 onClick={() => editor.chain().focus().setHorizontalRule().run()}
-              />
+              >
+                <AiOutlineLine />
+              </IconButton>
             ) : null}
 
-            <Dialog
-              onClose={() => setIsVisibleYouTubeDialog(false)}
-              title="Insert YouTube embed"
-              isOpen={isVisibleYouTubeDialog}
-            >
-              <DialogBody>
-                <Stack spacing={2}>
-                  <TextInput
-                    label="YouTube URL"
-                    placeholder="Write or paste the url here"
-                    name="url"
-                    onChange={(e) => setYouTubeInput(e.target.value)}
-                    value={youTubeInput}
-                    aria-label="YouTube URL"
-                  />
-
-                  <Stack horizontal={true} spacing={2}>
+            <Dialog.Root open={isVisibleYouTubeDialog} onOpenChange={setIsVisibleYouTubeDialog}>
+              <Dialog.Content>
+                <Dialog.Header>Insert YouTube embed</Dialog.Header>
+                <Dialog.Body>
+                  <Stack spacing={2}>
                     <TextInput
-                      label="YouTube video width"
-                      type="number"
-                      placeholder="width of the embed"
+                      label="YouTube URL"
+                      placeholder="Write or paste the url here"
                       name="url"
-                      onChange={(e) => setYouTubeWidthInput(e.target.value)}
-                      value={youTubeWidthInput}
-                      aria-label="YouTube video width"
+                      onChange={(e) => setYouTubeInput(e.target.value)}
+                      value={youTubeInput}
+                      aria-label="YouTube URL"
                     />
 
-                    <TextInput
-                      label="YouTube video height"
-                      type="number"
-                      placeholder="height of the embed"
-                      name="url"
-                      onChange={(e) => setYouTubeHeightInput(e.target.value)}
-                      value={youTubeHeightInput}
-                      aria-label="YouTube video height"
-                    />
+                    <Stack horizontal={true} spacing={2}>
+                      <TextInput
+                        label="YouTube video width"
+                        type="number"
+                        placeholder="width of the embed"
+                        name="url"
+                        onChange={(e) => setYouTubeWidthInput(e.target.value)}
+                        value={youTubeWidthInput}
+                        aria-label="YouTube video width"
+                      />
+
+                      <TextInput
+                        label="YouTube video height"
+                        type="number"
+                        placeholder="height of the embed"
+                        name="url"
+                        onChange={(e) => setYouTubeHeightInput(e.target.value)}
+                        value={youTubeHeightInput}
+                        aria-label="YouTube video height"
+                      />
+                    </Stack>
                   </Stack>
-                </Stack>
-              </DialogBody>
-              <DialogFooter
-                startAction={
+                </Dialog.Body>
+                <Dialog.Footer justifyContent="space-between">
                   <Button
                     onClick={() => {
                       setYouTubeInput("");
@@ -766,8 +757,6 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Cancel
                   </Button>
-                }
-                endAction={
                   <Button
                     disabled={youTubeInput.length === 0}
                     onClick={() => onInsertYouTubeEmbed()}
@@ -775,13 +764,12 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                   >
                     Insert YouTube embed
                   </Button>
-                }
-              />
-            </Dialog>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Root>
           </IconButtonGroup>
 
           <IconButton
-            icon={<Bold />}
             label="CTA"
             className="large-icon, is-active" // onClick={() => editor.chain().focus().toggleBold().run()}
             onClick={() => {
@@ -793,7 +781,9 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                 })
                 .run();
             }}
-          />
+          >
+            <Bold />
+          </IconButton>
         </Flex>
       </Flex>
     </Box>

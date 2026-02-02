@@ -52,5 +52,4 @@ const defaults = {
   },
 };
 
-module.exports = defaults;
-module.exports.default = defaults;
+export default defaults;

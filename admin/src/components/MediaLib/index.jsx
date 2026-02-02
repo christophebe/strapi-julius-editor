@@ -1,10 +1,24 @@
 import React from 'react';
-import { prefixFileUrlWithBackendUrl, useLibrary } from '@strapi/helper-plugin';
+import { useStrapiApp } from '@strapi/strapi/admin';
 import PropTypes from 'prop-types';
 
+const prefixFileUrlWithBackendUrl = (url) => {
+    if (!url) return url;
+
+    if (/^(https?:)?\/\//i.test(url)) {
+        return url;
+    }
+
+    const baseUrl = window.strapi?.backendURL || window.location.origin;
+    const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
+    const path = url.startsWith('/') ? url : `/${url}`;
+
+    return `${trimmedBaseUrl}${path}`;
+};
+
 const MediaLib = ({ isOpen, onChange, onToggle }) => {
-    const { components } = useLibrary();
-    const MediaLibraryDialog = components['media-library'];
+    const components = useStrapiApp('MediaLib', (state) => state.components);
+    const MediaLibraryDialog = components?.['media-library'];
 
     const handleSelectAssets = files => {
         const formattedFiles = files.map(f => ({
@@ -17,7 +31,7 @@ const MediaLib = ({ isOpen, onChange, onToggle }) => {
         onChange(formattedFiles);
     };
 
-    if(!isOpen) {
+    if (!isOpen || !MediaLibraryDialog) {
         return null
     };
 

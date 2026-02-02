@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
-import { Box } from "@strapi/design-system/Box";
-import { GridLayout } from "@strapi/design-system/Layout";
-import { ToggleInput } from "@strapi/design-system/ToggleInput";
-import { Typography } from "@strapi/design-system/Typography";
-import { addRemoveFromList } from "../../../../../utils/helpers.js";
+import { Box, Typography } from "@strapi/design-system";
+import GridLayout from "../../../components/GridLayout";
+import ToggleInput from "../../../components/ToggleInput";
 
 export default ({ errors, values, handleChange, isSubmitting }) => {
   return (

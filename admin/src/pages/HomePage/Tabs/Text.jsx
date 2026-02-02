@@ -1,9 +1,7 @@
 import React, {Fragment} from 'react'
-import {Box} from '@strapi/design-system/Box'
-import {GridLayout} from '@strapi/design-system/Layout'
-import {ToggleInput} from '@strapi/design-system/ToggleInput'
-import {Typography} from '@strapi/design-system/Typography'
-import {Field} from '@strapi/design-system/Field'
+import { Box, Typography } from '@strapi/design-system'
+import GridLayout from '../../../components/GridLayout'
+import ToggleInput from '../../../components/ToggleInput'
 import { addRemoveFromList } from '../../../../../utils/helpers.js'
 
 export default ({errors, values, handleChange, isSubmitting}) => {
@@ -15,21 +13,19 @@ export default ({errors, values, handleChange, isSubmitting}) => {
 
       <GridLayout>
         <Box>
-          <Field>
-            <ToggleInput
-              label="Heading 1"
-              size="S"
-              name="headings"
-              onLabel="Enabled"
-              offLabel="Disabled"
-              checked={values.headings.includes('h1')}
-              onChange={e => handleChange({
-                target: {
-                  name: 'headings',
-                  value: addRemoveFromList([...values.headings], 'h1')
-                }
-              })}/>
-          </Field>
+          <ToggleInput
+            label="Heading 1"
+            size="S"
+            name="headings"
+            onLabel="Enabled"
+            offLabel="Disabled"
+            checked={values.headings.includes('h1')}
+            onChange={e => handleChange({
+              target: {
+                name: 'headings',
+                value: addRemoveFromList([...values.headings], 'h1')
+              }
+            })}/>
         </Box>
         <Box>
           <ToggleInput

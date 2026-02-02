@@ -9,9 +9,7 @@ import { Toolbar } from "./Toolbar";
 import MediaLib from "../MediaLib";
 
 // Layout
-import { Box } from "@strapi/design-system/Box";
-import { Flex } from "@strapi/design-system/Flex";
-import { IconButton, IconButtonGroup } from "@strapi/design-system/IconButton";
+import { Box, Flex, IconButton, IconButtonGroup } from "@strapi/design-system";
 
 import Wrapper from "./styles.js";
 
@@ -33,65 +31,74 @@ const TableMenuBar = (editor) => {
     <Fragment key="tableMenubar">
       <IconButtonGroup className="button-group">
         <IconButton
-          icon={<AiOutlineInsertRowBelow />}
           label="Insert row below"
           onClick={() => editor.chain().focus().addRowAfter().run()}
-        />
+        >
+          <AiOutlineInsertRowBelow />
+        </IconButton>
         <IconButton
-          icon={<AiOutlineInsertRowAbove />}
           label="Insert row above"
           onClick={() => editor.chain().focus().addRowBefore().run()}
-        />
+        >
+          <AiOutlineInsertRowAbove />
+        </IconButton>
 
         <IconButton
-          icon={<AiOutlineInsertRowLeft />}
           label="Insert Column to the left"
           onClick={() => editor.chain().focus().addColumnBefore().run()}
-        />
+        >
+          <AiOutlineInsertRowLeft />
+        </IconButton>
 
         <IconButton
-          icon={<AiOutlineInsertRowRight />}
           label="Insert Column to the right"
           onClick={() => editor.chain().focus().addColumnAfter().run()}
-        />
+        >
+          <AiOutlineInsertRowRight />
+        </IconButton>
       </IconButtonGroup>
 
       <IconButtonGroup className="button-group">
         <IconButton
-          icon={<AiOutlineDeleteRow />}
           label="Delete row"
           onClick={() => editor.chain().focus().deleteRow().run()}
-        />
+        >
+          <AiOutlineDeleteRow />
+        </IconButton>
         <IconButton
-          icon={<AiOutlineDeleteColumn />}
           label="Delete column"
           onClick={() => editor.chain().focus().deleteColumn().run()}
-        />
+        >
+          <AiOutlineDeleteColumn />
+        </IconButton>
       </IconButtonGroup>
 
       <IconButtonGroup className="button-group">
         <IconButton
-          icon={<AiOutlineMergeCells />}
           label="Merge cells"
           onClick={() => editor.chain().focus().mergeCells().run()}
-        />
+        >
+          <AiOutlineMergeCells />
+        </IconButton>
         <IconButton
-          icon={<AiOutlineSplitCells />}
           label="Split cells"
           onClick={() => editor.chain().focus().splitCell().run()}
-        />
+        >
+          <AiOutlineSplitCells />
+        </IconButton>
       </IconButtonGroup>
 
       <IconButtonGroup className="button-group">
         <IconButton
-          icon={<AiOutlineDelete />}
           label="Delete table"
           onClick={() => {
             if (window.confirm("Are you sure you want to delete the table?")) {
               editor.chain().focus().deleteTable().run();
             }
           }}
-        />
+        >
+          <AiOutlineDelete />
+        </IconButton>
       </IconButtonGroup>
     </Fragment>
   );
