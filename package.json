@@ -1,5 +1,5 @@
 {
-  "name": "strapi-julius-editor",
+  "name": "@web-evasion/strapi-julius-editor",
   "version": "0.1.0",
   "description": "A drop-in replacement for the strapi editor based on tiptap with components & AI",
   "strapi": {
