@@ -62,7 +62,7 @@ const onHeadingChange = (editor, type) => {
   }
 };
 
-export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
+export const Toolbar = ({ editor, toggleMediaLib, settings, disabled }) => {
   const [isVisibleLinkDialog, setIsVisibleLinkDialog] = useState(false);
   const [linkInput, setLinkInput] = useState("");
   const [linkTargetInput, setLinkTargetInput] = useState("");
@@ -170,6 +170,8 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
     return null;
   }
 
+  const toolbarDisabled = Boolean(disabled);
+
   let selectedTextStyle = "none";
 
   if (editor.isActive("heading", { level: 1 })) selectedTextStyle = "h1";
@@ -181,7 +183,18 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
   if (editor.isActive("paragraph")) selectedTextStyle = "paragraph";
 
   return (
-    <Box padding={2} background="neutral100" className="menu-bar">
+    <Box
+      padding={2}
+      background="neutral100"
+      className="menu-bar"
+      aria-disabled={toolbarDisabled}
+      opacity={toolbarDisabled ? 0.65 : undefined}
+      style={
+        toolbarDisabled
+          ? { pointerEvents: "none", userSelect: "none" }
+          : undefined
+      }
+    >
       <Flex justifyContent="space-between">
         <Flex style={{ flexWrap: "wrap" }}>
           <Box className="button-group">
@@ -190,6 +203,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
               required
               size="S"
               placeholder="Text style"
+              disabled={toolbarDisabled}
               onChange={(val) => onHeadingChange(editor, val)}
               value={selectedTextStyle}
             >
@@ -484,6 +498,7 @@ export const Toolbar = ({ editor, toggleMediaLib, settings }) => {
                       label="Link target"
                       required
                       placeholder="Select link target"
+                      disabled={toolbarDisabled}
                       value={linkTargetInput}
                       onChange={setLinkTargetInput}
                     >

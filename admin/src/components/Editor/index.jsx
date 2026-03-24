@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 // TipTap Editor
 import { BubbleMenu, EditorContent } from "@tiptap/react";
@@ -26,18 +26,20 @@ import {
   AiOutlineSplitCells,
 } from "react-icons/ai";
 
-const TableMenuBar = (editor) => {
+const TableMenuBar = ({ editor, disabled: tableControlsDisabled }) => {
   return (
-    <Fragment key="tableMenubar">
+    <Fragment>
       <IconButtonGroup className="button-group">
         <IconButton
           label="Insert row below"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().addRowAfter().run()}
         >
           <AiOutlineInsertRowBelow />
         </IconButton>
         <IconButton
           label="Insert row above"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().addRowBefore().run()}
         >
           <AiOutlineInsertRowAbove />
@@ -45,6 +47,7 @@ const TableMenuBar = (editor) => {
 
         <IconButton
           label="Insert Column to the left"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().addColumnBefore().run()}
         >
           <AiOutlineInsertRowLeft />
@@ -52,6 +55,7 @@ const TableMenuBar = (editor) => {
 
         <IconButton
           label="Insert Column to the right"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().addColumnAfter().run()}
         >
           <AiOutlineInsertRowRight />
@@ -61,12 +65,14 @@ const TableMenuBar = (editor) => {
       <IconButtonGroup className="button-group">
         <IconButton
           label="Delete row"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().deleteRow().run()}
         >
           <AiOutlineDeleteRow />
         </IconButton>
         <IconButton
           label="Delete column"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().deleteColumn().run()}
         >
           <AiOutlineDeleteColumn />
@@ -76,12 +82,14 @@ const TableMenuBar = (editor) => {
       <IconButtonGroup className="button-group">
         <IconButton
           label="Merge cells"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().mergeCells().run()}
         >
           <AiOutlineMergeCells />
         </IconButton>
         <IconButton
           label="Split cells"
+          disabled={tableControlsDisabled}
           onClick={() => editor.chain().focus().splitCell().run()}
         >
           <AiOutlineSplitCells />
@@ -91,6 +99,7 @@ const TableMenuBar = (editor) => {
       <IconButtonGroup className="button-group">
         <IconButton
           label="Delete table"
+          disabled={tableControlsDisabled}
           onClick={() => {
             if (window.confirm("Are you sure you want to delete the table?")) {
               editor.chain().focus().deleteTable().run();
@@ -105,33 +114,46 @@ const TableMenuBar = (editor) => {
 };
 
 // Floating bubble menu for table
-const BubbleMenuComponent = ({ editor, toggleMediaLib }) => {
-  if (editor) {
-    let menuBars = [];
+const BubbleMenuComponent = ({ editor, disabled }) => {
+  if (!editor) {
+    return null;
+  }
 
-    if (editor.isActive("table")) {
-      menuBars.push(TableMenuBar(editor));
-    }
+  let menuBars = [];
 
-    return (
-      <BubbleMenu
+  if (editor.isActive("table")) {
+    menuBars.push(
+      <TableMenuBar
+        key="tableMenubar"
         editor={editor}
-        tippyOptions={{ zIndex: 2, maxWidth: "450px" }}
-      >
-        {menuBars.length ? (
-          <Flex
-            padding={2}
-            className="menu-bar floating"
-            style={{ flexWrap: "wrap" }}
-          >
-            {/* Render menu bars */}
-            {menuBars}
-          </Flex>
-        ) : null}
-      </BubbleMenu>
+        disabled={Boolean(disabled)}
+      />
     );
   }
-  return null;
+
+  return (
+    <BubbleMenu
+      editor={editor}
+      tippyOptions={{ zIndex: 2, maxWidth: "450px" }}
+    >
+      {menuBars.length ? (
+        <Flex
+          padding={2}
+          className="menu-bar floating"
+          aria-disabled={disabled || undefined}
+          opacity={disabled ? 0.65 : undefined}
+          style={{
+            flexWrap: "wrap",
+            ...(disabled
+              ? { pointerEvents: "none", userSelect: "none" }
+              : {}),
+          }}
+        >
+          {menuBars}
+        </Flex>
+      ) : null}
+    </BubbleMenu>
+  );
 };
 
 const Editor = ({ onChange, name, value, editor, disabled, settings }) => {
@@ -139,6 +161,13 @@ const Editor = ({ onChange, name, value, editor, disabled, settings }) => {
   const [mediaLibVisible, setMediaLibVisible] = useState(false);
   const [forceInsert, setForceInsert] = useState(false);
   const handleToggleMediaLib = () => setMediaLibVisible((prev) => !prev);
+
+  // Close the media picker if the field becomes read-only (e.g. switching to Published).
+  useEffect(() => {
+    if (disabled && mediaLibVisible) {
+      setMediaLibVisible(false);
+    }
+  }, [disabled, mediaLibVisible]);
 
   const getUpdatedImage = (asset) => ({
     src: asset.url,
@@ -217,11 +246,9 @@ const Editor = ({ onChange, name, value, editor, disabled, settings }) => {
           editor={editor}
           toggleMediaLib={handleToggleMediaLib}
           settings={settings}
+          disabled={disabled}
         />
-        <BubbleMenuComponent
-          editor={editor}
-          toggleMediaLib={handleToggleMediaLib}
-        />
+        <BubbleMenuComponent editor={editor} disabled={disabled} />
 
         <Box
           padding={2}

@@ -145,6 +145,9 @@ const WysiwygContent = ({
   const fallbackFetchedRef = useRef(false);
   const lastEmittedValueRef = useRef(null);
   const lastEmittedAtRef = useRef(0);
+  /** Latest disabled flag for onUpdate (useEditor closure is stable). */
+  const disabledRef = useRef(disabled);
+  disabledRef.current = disabled;
 
   const isTiptapDoc = (doc) =>
     doc &&
@@ -222,6 +225,7 @@ const WysiwygContent = ({
   };
 
   const editor = useEditor({
+    editable: !disabled,
     extensions: [
       // CTA
       BlockExtension,
@@ -320,6 +324,9 @@ const WysiwygContent = ({
       preserveWhitespace: "full",
     },
     onUpdate(ctx) {
+      if (disabledRef.current) {
+        return;
+      }
       const saveMode = settings.other.saveJson
         ? "json-string"
         : saveModeRef.current;
@@ -340,6 +347,15 @@ const WysiwygContent = ({
       });
     },
   });
+
+  /**
+   * Keep TipTap in sync with Strapi form state (e.g. Published tab is read-only while Draft is editable).
+   * InputRenderer sets disabled when the whole form is disabled.
+   */
+  useEffect(() => {
+    if (!editor) return;
+    editor.setEditable(!disabled);
+  }, [editor, disabled]);
 
   useEffect(() => {
     if (!editor) return;
