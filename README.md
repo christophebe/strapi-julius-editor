@@ -39,12 +39,11 @@ The type can be used to have different styles for different content blocks. The 
 ## Install 
 
 ```
-# Install the dependency
-npm install strapi-julius-editor
+# Install the dependency (package name is @web-evasion/strapi-julius-editor)
+pnpm add @web-evasion/strapi-julius-editor
 
-or 
-
-yarn add strapi-julius-editor
+# or: npm install @web-evasion/strapi-julius-editor
+# or: yarn add @web-evasion/strapi-julius-editor
 ```
 
 ### Add the following to the webpack config (/src/admin/webpack.config.js)
@@ -80,7 +79,7 @@ export default [
 ```
 
 ### Build the Strapi Admin
-npm run build
+pnpm build
 
 
 # Setting up the editor
