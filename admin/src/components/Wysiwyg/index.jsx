@@ -387,6 +387,9 @@ const WysiwygContent = ({
       }
       setCurrentContent(content);
       editor.commands.clearContent(true);
+      // Form can briefly clear during Draft/Published refetch; avoid the
+      // "matchesEmitted" guard blocking re-hydration when values match last emit.
+      lastEmittedValueRef.current = null;
       return;
     }
 
@@ -412,8 +415,14 @@ const WysiwygContent = ({
         typeof emitted === "object" &&
         typeof value === "object" &&
         JSON.stringify(emitted) === JSON.stringify(value);
+      const emittedMatchesForm =
+        matchesEmitted || matchesEmittedJson || matchesEmittedObject;
 
-      if (matchesEmitted || matchesEmittedJson || matchesEmittedObject) {
+      // Only skip syncing when the editor already reflects the form value.
+      // After a transient empty value (e.g. Strapi status tab refetch), we clear
+      // the editor but the form value can equal `lastEmittedValueRef`; skipping
+      // would leave the editor blank until another unrelated update.
+      if (emittedMatchesForm && !editor.isEmpty) {
         return;
       }
     }
