@@ -1,7 +1,14 @@
 import { Box, Field, Typography } from "@strapi/design-system";
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useIntl } from "react-intl";
+import { useLocation } from "react-router-dom";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { getFetchClient, useField } from "@strapi/strapi/admin";
 import { getSettings } from "../../../../utils/api";
@@ -60,9 +67,9 @@ const Wysiwyg = (opts) => {
   const field = useField(name);
   const value = field?.value ?? propValue;
   const fieldOnChange = field?.onChange ?? onChange;
+
   const [savedSettings, setSavedSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     let isMounted = true;
 
@@ -145,9 +152,29 @@ const WysiwygContent = ({
   const fallbackFetchedRef = useRef(false);
   const lastEmittedValueRef = useRef(null);
   const lastEmittedAtRef = useRef(0);
+  /** When true, TipTap updates come from sync effects — must not mark the Strapi form dirty. */
+  const isApplyingExternalContentRef = useRef(false);
+  const location = useLocation();
+  /** Strapi EditView draft/published tab (`?status=`). Drives refetch + form reset. */
+  const documentStatus =
+    new URLSearchParams(location.search).get("status") ?? "draft";
   /** Latest disabled flag for onUpdate (useEditor closure is stable). */
   const disabledRef = useRef(disabled);
   disabledRef.current = disabled;
+  /** Latest Strapi field value — onUpdate closure must not treat stale props as "no-op". */
+  const formValueRef = useRef(value);
+  formValueRef.current = value;
+
+  /**
+   * Draft ↔ Published switches refetch the document; reset sync guards so we never
+   * treat a stale `lastValueKeyRef` as authoritative while TipTap was cleared or rebuilt.
+   */
+  useEffect(() => {
+    lastValueKeyRef.current = null;
+    lastEmittedValueRef.current = null;
+    hydratedContentRef.current = false;
+    fallbackFetchedRef.current = false;
+  }, [documentStatus]);
 
   const isTiptapDoc = (doc) =>
     doc &&
@@ -222,6 +249,84 @@ const WysiwygContent = ({
     }
 
     return { content: "", saveMode: "html" };
+  };
+
+  /**
+   * Returns true when TipTap output is already what the Strapi form holds.
+   * Stops spurious handleChange (Formik dirty) after Draft↔Published or programmatic sync.
+   *
+   * Strapi often stores richtext as a TipTap doc object in the admin form; we compare `getJSON()`.
+   */
+  const editorOutputMatchesFormValue = (
+    nextValue,
+    saveModeForEmit,
+    rawFormValue,
+    editorInstance
+  ) => {
+    if (editorInstance) {
+      try {
+        const edJson = editorInstance.getJSON();
+        if (
+          rawFormValue &&
+          typeof rawFormValue === "object" &&
+          !Array.isArray(rawFormValue) &&
+          rawFormValue.type === "doc"
+        ) {
+          if (JSON.stringify(rawFormValue) === JSON.stringify(edJson)) {
+            return true;
+          }
+        }
+        const { content: derivedFromForm } = deriveContent(rawFormValue);
+        if (
+          derivedFromForm &&
+          typeof derivedFromForm === "object" &&
+          derivedFromForm.type === "doc"
+        ) {
+          if (JSON.stringify(derivedFromForm) === JSON.stringify(edJson)) {
+            return true;
+          }
+        }
+      } catch {
+        // continue with serialized comparisons
+      }
+    }
+
+    const { content } = deriveContent(rawFormValue);
+    if (saveModeForEmit === "json-string") {
+      try {
+        return JSON.stringify(content) === nextValue;
+      } catch {
+        return false;
+      }
+    }
+    if (saveModeForEmit === "json-object") {
+      try {
+        return JSON.stringify(content) === JSON.stringify(nextValue);
+      } catch {
+        return false;
+      }
+    }
+    if (saveModeForEmit === "json-array") {
+      try {
+        const docSlice =
+          content &&
+          typeof content === "object" &&
+          content.type === "doc" &&
+          Array.isArray(content.content)
+            ? content.content
+            : content;
+        return JSON.stringify(docSlice ?? []) === JSON.stringify(nextValue);
+      } catch {
+        return false;
+      }
+    }
+    if (typeof content === "string" && content === nextValue) {
+      return true;
+    }
+    if (typeof rawFormValue === "string" && rawFormValue === nextValue) {
+      return true;
+    }
+    return false;
   };
 
   const editor = useEditor({
@@ -324,7 +429,11 @@ const WysiwygContent = ({
       preserveWhitespace: "full",
     },
     onUpdate(ctx) {
-      if (disabledRef.current) {
+      if (disabledRef.current || isApplyingExternalContentRef.current) {
+        return;
+      }
+      const tr = ctx.transaction;
+      if (tr != null && tr.docChanged === false) {
         return;
       }
       const saveMode = settings.other.saveJson
@@ -340,6 +449,17 @@ const WysiwygContent = ({
         nextValue = ctx.editor.getJSON().content ?? [];
       }
 
+      if (
+        editorOutputMatchesFormValue(
+          nextValue,
+          saveMode,
+          formValueRef.current,
+          ctx.editor
+        )
+      ) {
+        return;
+      }
+
       lastEmittedValueRef.current = nextValue;
       lastEmittedAtRef.current = Date.now();
       handleChange({
@@ -352,10 +472,23 @@ const WysiwygContent = ({
    * Keep TipTap in sync with Strapi form state (e.g. Published tab is read-only while Draft is editable).
    * InputRenderer sets disabled when the whole form is disabled.
    */
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!editor) return;
-    editor.setEditable(!disabled);
+    // TipTap's setEditable(editable, emitUpdate) defaults emitUpdate=true, which
+    // fires the `update` event and would mark the Strapi form dirty on Draft↔Published.
+    editor.setEditable(!disabled, false);
   }, [editor, disabled]);
+
+  const runExternalEditorCommand = useCallback((fn) => {
+    isApplyingExternalContentRef.current = true;
+    try {
+      fn();
+    } finally {
+      queueMicrotask(() => {
+        isApplyingExternalContentRef.current = false;
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!editor) return;
@@ -376,9 +509,32 @@ const WysiwygContent = ({
       }
     }
 
-    if (nextKey === lastValueKeyRef.current) {
+    const editorMatchesDerived = () => {
+      if (content === null || content === "") {
+        return editor.isEmpty;
+      }
+      if (typeof content === "string") {
+        return editor.getHTML() === content;
+      }
+      try {
+        return (
+          JSON.stringify(editor.getJSON()) === JSON.stringify(content)
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    // Same serialized `value` as last time is not enough: after a tab switch the
+    // form can briefly reset while TipTap is cleared, so keys may match but the
+    // editor is still empty (or vice versa).
+    if (
+      nextKey === lastValueKeyRef.current &&
+      editorMatchesDerived()
+    ) {
       return;
     }
+
     lastValueKeyRef.current = nextKey;
 
     if (content === null || content === "") {
@@ -386,9 +542,9 @@ const WysiwygContent = ({
         return;
       }
       setCurrentContent(content);
-      editor.commands.clearContent(true);
-      // Form can briefly clear during Draft/Published refetch; avoid the
-      // "matchesEmitted" guard blocking re-hydration when values match last emit.
+      runExternalEditorCommand(() => {
+        editor.commands.clearContent(false);
+      });
       lastEmittedValueRef.current = null;
       return;
     }
@@ -401,51 +557,15 @@ const WysiwygContent = ({
       return;
     }
 
-    if (lastEmittedValueRef.current !== null) {
-      const emitted = lastEmittedValueRef.current;
-      const matchesEmitted =
-        typeof emitted === "string" &&
-        typeof value === "string" &&
-        emitted === value;
-      const matchesEmittedJson =
-        typeof emitted === "string" &&
-        typeof value === "string" &&
-        emitted === value;
-      const matchesEmittedObject =
-        typeof emitted === "object" &&
-        typeof value === "object" &&
-        JSON.stringify(emitted) === JSON.stringify(value);
-      const emittedMatchesForm =
-        matchesEmitted || matchesEmittedJson || matchesEmittedObject;
-
-      // Only skip syncing when the editor already reflects the form value.
-      // After a transient empty value (e.g. Strapi status tab refetch), we clear
-      // the editor but the form value can equal `lastEmittedValueRef`; skipping
-      // would leave the editor blank until another unrelated update.
-      if (emittedMatchesForm && !editor.isEmpty) {
-        return;
-      }
-    }
-
-    if (typeof content === "string") {
-      const currentHtml = editor.getHTML();
-      if (currentHtml === content) {
-        return;
-      }
-    } else {
-      try {
-        const currentJson = editor.getJSON();
-        if (JSON.stringify(currentJson) === JSON.stringify(content)) {
-          return;
-        }
-      } catch {
-        // Ignore comparison errors and continue to set content.
-      }
+    if (editorMatchesDerived()) {
+      return;
     }
 
     setCurrentContent(content);
-    editor.commands.setContent(content, false);
-  }, [editor, value, settings.other.saveJson]);
+    runExternalEditorCommand(() => {
+      editor.commands.setContent(content, false);
+    });
+  }, [editor, value, settings.other.saveJson, documentStatus, runExternalEditorCommand]);
 
   useEffect(() => {
     if (!editor) return;
@@ -467,11 +587,15 @@ const WysiwygContent = ({
     fallbackFetchedRef.current = true;
 
     const fetchClient = getFetchClient();
+    const params = {
+      status: documentStatus,
+      ...(locale ? { locale } : {}),
+    };
+
     fetchClient
-      .get(
-        `/content-manager/collection-types/${contentType}/${documentId}`,
-        locale ? { params: { locale } } : undefined
-      )
+      .get(`/content-manager/collection-types/${contentType}/${documentId}`, {
+        params,
+      })
       .then((response) => {
         const entry = response?.data?.data;
         if (!entry) return;
@@ -480,12 +604,14 @@ const WysiwygContent = ({
         if (!content) return;
         hydratedContentRef.current = true;
         setCurrentContent(content);
-        editor.commands.setContent(content, false);
+        runExternalEditorCommand(() => {
+          editor.commands.setContent(content, false);
+        });
       })
       .catch(() => {
         // Ignore fallback errors; core form still drives value updates.
       });
-  }, [editor, name, value]);
+  }, [editor, name, value, documentStatus, runExternalEditorCommand]);
 
   return (
     <TooltipProvider>

@@ -113,9 +113,9 @@ const TableMenuBar = ({ editor, disabled: tableControlsDisabled }) => {
   );
 };
 
-// Floating bubble menu for table
+// Floating bubble menu for table (hidden entirely when the field is read-only)
 const BubbleMenuComponent = ({ editor, disabled }) => {
-  if (!editor) {
+  if (!editor || disabled) {
     return null;
   }
 
@@ -242,19 +242,25 @@ const Editor = ({ onChange, name, value, editor, disabled, settings }) => {
         borderStyle="solid"
         borderColor="neutral200"
       >
-        <Toolbar
-          editor={editor}
-          toggleMediaLib={handleToggleMediaLib}
-          settings={settings}
-          disabled={disabled}
-        />
+        {!disabled ? (
+          <Toolbar
+            editor={editor}
+            toggleMediaLib={handleToggleMediaLib}
+            settings={settings}
+            disabled={disabled}
+          />
+        ) : null}
         <BubbleMenuComponent editor={editor} disabled={disabled} />
 
         <Box
           padding={2}
-          background="neutral0"
+          background={disabled ? "neutral150" : "neutral0"}
           maxHeight={"600px"}
-          style={{ resize: "vertical", overflow: "auto" }}
+          style={{
+            resize: disabled ? "none" : "vertical",
+            overflow: "auto",
+            ...(disabled ? { cursor: "default" } : {}),
+          }}
         >
           <EditorContent editor={editor} />
         </Box>

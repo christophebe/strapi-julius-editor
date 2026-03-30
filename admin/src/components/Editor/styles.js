@@ -53,9 +53,15 @@ export default styled(Box)`
     line-height: 1.8rem;
     color: ${({ theme }) => theme.colors.neutral800};
     min-height: 80px;
+    /* Keeps caret visible in empty editors (blank <p> line box must not collapse). */
+    caret-color: currentColor;
 
     > * + * {
       margin-top: 0.75em;
+    }
+
+    p {
+      min-height: 1.8rem;
     }
 
     .ProseMirror-selectednode {
