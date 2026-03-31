@@ -48,7 +48,7 @@ export default styled(Box)`
   }
 
   /* TipTap injects later a rule on .ProseMirror-hideselection descendants (caret transparent).
-     Use theme.neutral800 like body text; :not(.ProseMirror-hideselection) keeps drag UX intact. */
+     On empty docs, that class can persist briefly after focus and hide the caret. */
   .ProseMirror {
     outline: none;
     font-size: 16px;
@@ -61,11 +61,23 @@ export default styled(Box)`
       margin-top: 0.75em;
     }
 
-    /* Paragraph sizing + caret; omit during TipTap hide-selection so drag UX stays correct */
+    /* Paragraph sizing + caret; omit during TipTap hide-selection by default. */
     &:not(.ProseMirror-hideselection) p {
       min-height: 1.8rem;
       min-block-size: 1.8rem;
       caret-color: ${({ theme }) => theme.colors.neutral800};
+    }
+
+    /* If ProseMirror remains in hideselection while focused (empty editor edge case),
+       force caret visibility using the current text color for light/dark themes. */
+    &.ProseMirror-focused,
+    &.ProseMirror-focused * {
+      caret-color: currentColor;
+    }
+
+    &.ProseMirror-focused.ProseMirror-hideselection,
+    &.ProseMirror-focused.ProseMirror-hideselection * {
+      caret-color: currentColor !important;
     }
 
     .ProseMirror-selectednode {
