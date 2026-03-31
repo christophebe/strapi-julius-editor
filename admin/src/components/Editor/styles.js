@@ -47,21 +47,25 @@ export default styled(Box)`
     }
   }
 
+  /* TipTap injects later a rule on .ProseMirror-hideselection descendants (caret transparent).
+     Use theme.neutral800 like body text; :not(.ProseMirror-hideselection) keeps drag UX intact. */
   .ProseMirror {
     outline: none;
     font-size: 16px;
     line-height: 1.8rem;
     color: ${({ theme }) => theme.colors.neutral800};
     min-height: 80px;
-    /* Keeps caret visible in empty editors (blank <p> line box must not collapse). */
-    caret-color: currentColor;
+    caret-color: ${({ theme }) => theme.colors.neutral800};
 
     > * + * {
       margin-top: 0.75em;
     }
 
-    p {
+    /* Paragraph sizing + caret; omit during TipTap hide-selection so drag UX stays correct */
+    &:not(.ProseMirror-hideselection) p {
       min-height: 1.8rem;
+      min-block-size: 1.8rem;
+      caret-color: ${({ theme }) => theme.colors.neutral800};
     }
 
     .ProseMirror-selectednode {
