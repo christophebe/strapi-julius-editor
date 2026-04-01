@@ -54,6 +54,7 @@ export default styled(Box)`
     font-size: 16px;
     line-height: 1.8rem;
     color: ${({ theme }) => theme.colors.neutral800};
+    -webkit-text-fill-color: ${({ theme }) => theme.colors.neutral800};
     min-height: 80px;
     caret-color: ${({ theme }) => theme.colors.neutral800};
 
@@ -65,6 +66,8 @@ export default styled(Box)`
     &:not(.ProseMirror-hideselection) p {
       min-height: 1.8rem;
       min-block-size: 1.8rem;
+      color: inherit;
+      -webkit-text-fill-color: currentColor;
       caret-color: ${({ theme }) => theme.colors.neutral800};
     }
 
@@ -78,6 +81,19 @@ export default styled(Box)`
     &.ProseMirror-focused.ProseMirror-hideselection,
     &.ProseMirror-focused.ProseMirror-hideselection * {
       caret-color: currentColor !important;
+    }
+
+    /* Safari sometimes paints the caret from text-fill in contenteditable, not only caret-color.
+       Keep text-fill aligned with current text color to avoid invisible caret on empty docs. */
+    @supports (-webkit-touch-callout: none) {
+      &, * {
+        -webkit-text-fill-color: currentColor;
+      }
+
+      &.ProseMirror-focused,
+      &.ProseMirror-focused * {
+        caret-color: currentColor !important;
+      }
     }
 
     .ProseMirror-selectednode {
